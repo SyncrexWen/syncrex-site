@@ -1,0 +1,32 @@
+---
+// src/pages/blogs/index.astro
+import { getCollection } from 'astro:content';
+// 引入你的全局布局
+import PageLayout from '../../layouts/PageLayout.astro';
+
+// 1. 获取 'blogs' 集合中的所有文章
+// 这里的 'blogs' 必须对应 src/content/blogs 文件夹名
+const posts = await getCollection('blogs');
+
+// 2. 按日期倒序排列 (新的在前面)
+posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const title = "我的博客文章列表";
+const description = "这里记录了我的所有技术与生活思考";
+---
+
+<PageLayout title={title} description={description}>
+  <main>
+    <h1>{title}</h1>
+    <ul>
+      {posts.map((post) => (
+        <li>
+          <a href={`/blogs/${post.slug}/`}>
+            <h2>{post.data.title}</h2>
+            <p>发布时间：{post.data.pubDate.toLocaleDateString()}</p>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </main>
+</PageLayout>

@@ -1,0 +1,90 @@
+---
+import HeaderLink from './HeaderLink.astro';
+import { SITE_TITLE } from '../consts';
+---
+
+<header id="main-header">
+  <nav>
+    <h2><a href="/">{SITE_TITLE}</a></h2>
+    <div class="internal-links">
+      <HeaderLink href="/">Homepage</HeaderLink>
+      <HeaderLink href="/blogs">Blogs</HeaderLink>
+      <HeaderLink href="/pubs">Pubs</HeaderLink>
+      <HeaderLink href="/aboutMe">Me</HeaderLink>
+      <HeaderLink href="/aboutWebsite">Site</HeaderLink>
+    </div>
+  </nav>
+</header>
+
+<style>
+  header {
+    margin: 0;
+    padding: 0 1em;
+    background: white; /* 默认背景色：白色 */
+    box-shadow: 0 2px 8px rgba(var(--black), 5%);
+
+    /* 核心设置 1: 固定在顶部 */
+    position: sticky;
+    top: 0;
+    z-index: 100; /* 保证在最上层 */
+
+    /* 核心设置 2: 颜色变化的过渡动画 */
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  /* 核心设置 3: 定义滚动后的样式 */
+  header.scrolled {
+    background: #2d3748; /* 滚动后变成深灰色 */
+    color: white;         /* 文字变成白色 */
+  }
+
+  /* 如果导航链接里的文字颜色没有继承 header，可能需要单独写样式 */
+  /* :global 是为了穿透组件作用域去影响子组件 HeaderLink */
+  header.scrolled :global(a) {
+    color: white;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: 1em;
+  }
+  h2 a,
+  h2 a.active {
+    text-decoration: none;
+  }
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  nav a {
+    padding: 1em 0.5em;
+    color: var(--black);
+    border-bottom: 4px solid transparent;
+    text-decoration: none;
+    }
+    nav a.active {
+    text-decoration: none;
+    border-bottom-color: var(--accent);
+    }
+
+</style>
+
+<script is:inline>
+  // is:inline 告诉 Astro 这段 JS 不需要打包，直接扔给浏览器执行
+
+  const header = document.getElementById('main-header');
+
+  function handleScroll() {
+    if (window.scrollY > 0) {
+      // 只要滚动了哪怕 1px，就加上 class
+      header.classList.add('scrolled');
+    } else {
+      // 回到顶部，移除 class
+      header.classList.remove('scrolled');
+    }
+  }
+
+  // 监听滚动事件
+  window.addEventListener('scroll', handleScroll);
+</script>

@@ -1,17 +1,151 @@
 ---
+import { getCollection } from 'astro:content';
+import PageLayout from '../layouts/PageLayout.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
+// 1. 获取最新的3篇博客文章 (验证 Content Collections 配置是否正确)
+// 注意：这里用了 chain method：获取 -> 过滤草稿 -> 按时间倒序 -> 取前3个
+const posts = (await getCollection('blogs'))
+  .filter(post => !post.data.isDraft) // 假设你在 schema 里定义了 isDraft
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<PageLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>欢迎来到我的数字花园 🌿</h1>
+            <p>
+                这是基于 Astro 构建的个人主页。<br />
+                这里用于测试 Header 的滚动效果、文章数据的读取以及页面布局。
+            </p>
+            <div class="hero-actions">
+                <a href="/blogs" class="btn btn-primary">浏览博客</a>
+                <a href="https://github.com/yourusername" target="_blank" class="btn btn-outline">GitHub</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="recent-posts">
+        <h2>🔥 最新文章</h2>
+        <div class="post-grid">
+            {posts.length > 0 ? (
+                posts.map((post) => (
+                    <a href={`/blogs/${post.slug}/`} class="post-card">
+                        <h3>{post.data.title}</h3>
+                        <p class="date">{post.data.pubDate.toLocaleDateString()}</p>
+                        <p class="desc">{post.data.description}</p>
+                    </a>
+                ))
+            ) : (
+                <p>暂时还没有文章，请去 src/content/blogs 下添加一篇 markdown 文件。</p>
+            )}
+        </div>
+    </section>
+
+    <section class="long-content-test">
+        <h2>📜 滚动测试区</h2>
+        <p>请尝试向下滑动页面，观察顶部的 Header 导航栏：</p>
+        <ul>
+            <li>Header 是否固定在顶部？(Sticky)</li>
+            <li>背景色是否从白色变成了深色？(JS 脚本生效)</li>
+            <li>文字颜色是否变成了白色？(CSS :global 生效)</li>
+        </ul>
+
+        {Array.from({ length: 10 }).map((_, i) => (
+            <p style={{ opacity: 0.5 }}>
+                Placeholder paragraph {i + 1}: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            </p>
+        ))}
+    </section>
+
+</PageLayout>
+
+<style>
+    /* 简单的页面内样式，用于快速验证 */
+
+    section {
+        margin-bottom: 4rem;
+        padding: 0 1rem;
+    }
+
+    /* Hero 样式 */
+    .hero {
+        text-align: center;
+        padding: 4rem 1rem;
+        background: linear-gradient(to bottom, transparent, rgba(var(--gray), 0.1));
+        border-radius: 1rem;
+    }
+    .hero h1 {
+        font-size: 2.5rem;
+        margin-bottom: 0.5em;
+    }
+    .hero-actions {
+        margin-top: 2rem;
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+    }
+
+    /* 按钮样式 */
+    .btn {
+        padding: 0.5rem 1.5rem;
+        border-radius: 999px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: all 0.2s;
+    }
+    .btn-primary {
+        background: #2d3748;
+        color: white;
+    }
+    .btn-outline {
+        border: 2px solid #2d3748;
+        color: #2d3748;
+    }
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    /* 文章卡片网格 */
+    .post-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin-top: 1.5rem;
+    }
+    .post-card {
+        display: block;
+        padding: 1.5rem;
+        border: 1px solid rgba(var(--gray), 0.2);
+        border-radius: 8px;
+        text-decoration: none;
+        color: inherit;
+        transition: border-color 0.2s;
+    }
+    .post-card:hover {
+        border-color: #2d3748;
+    }
+    .post-card h3 {
+        margin: 0 0 0.5rem 0;
+        font-size: 1.25rem;
+    }
+    .post-card .date {
+        font-size: 0.85rem;
+        color: #666;
+        margin-bottom: 0.5rem;
+    }
+    .post-card .desc {
+        margin: 0;
+        font-size: 0.95rem;
+        line-height: 1.4;
+    }
+
+    .long-content-test {
+        border-top: 1px dashed #ccc;
+        padding-top: 2rem;
+    }
+</style>

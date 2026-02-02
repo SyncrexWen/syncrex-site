@@ -1,0 +1,29 @@
+---
+import DefaultLayout from './DefaultLayout.astro';
+
+const { title, description, pubDate, updatedDate } = Astro.props;
+---
+
+<DefaultLayout title={title} description={description}>
+  <main class="container mx-auto px-4 py-12 max-w-4xl">
+
+    <div class="mb-10 text-center">
+      <h1 class="text-3xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-white">
+        {title}
+      </h1>
+      <div class="text-gray-500 dark:text-gray-400 text-sm">
+        <time>{new Date(pubDate).toLocaleDateString()}</time>
+        {updatedDate && <span class="ml-2">(Updated: {new Date(updatedDate).toLocaleDateString()})</span>}
+      </div>
+    </div>
+
+    <hr class="border-gray-200 dark:border-gray-700 mb-10" />
+
+    <article class="prose prose-lg mx-auto dark:prose-invert
+                    prose-a:text-blue-600 hover:prose-a:text-blue-500
+                    prose-img:rounded-xl prose-img:shadow-lg">
+      <slot />
+    </article>
+
+  </main>
+</DefaultLayout>

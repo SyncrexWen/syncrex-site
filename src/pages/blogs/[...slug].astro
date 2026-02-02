@@ -1,0 +1,42 @@
+---
+// src/pages/blogs/[...slug].astro
+import { getCollection } from 'astro:content';
+import DefaultLayout from '../../layouts/DefaultLayout.astro';
+
+// 1. 核心函数：getStaticPaths
+// 因为 Astro 默认是静态构建 (SSG)，它必须在打包时知道所有可能的路径。
+// 这个函数告诉 Astro："去 content/blogs 看看，每一篇文章都给我生成一个页面"。
+export async function getStaticPaths() {
+  const posts = await getCollection('blogs');
+
+  return posts.map((post) => ({
+    // params 决定了 URL 的长相，slug 对应文件名 [...slug]
+    params: { slug: post.slug },
+    // props 决定了把什么数据传给页面组件使用
+    props: post,
+  }));
+}
+
+// 2. 获取当前页面的数据
+// 注意：这里的 Astro.props 拿到的就是上面 props: post 传进来的完整文章对象
+const post = Astro.props;
+
+// 3. 渲染 Markdown 内容
+// Astro 会把 Markdown 正文转换成 <Content /> 组件
+const { Content } = await post.render();
+---
+
+<DefaultLayout
+    title={post.data.title}
+    description={post.data.description}
+>
+  <article>
+    <h1>{post.data.title}</h1>
+    <hr />
+
+    {/* 4. 插入 Markdown 正文 */}
+    <div class="prose">
+        <Content />
+    </div>
+  </article>
+</DefaultLayout>

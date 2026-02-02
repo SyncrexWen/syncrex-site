@@ -1,0 +1,20 @@
+---
+// src/layouts/DefaultLayout.astro
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+// 接收外部传入的变量
+const { title, description} = Astro.props;
+---
+
+<html lang="zh-cn">
+  <head>
+    <BaseHead title={title} description={description}/>
+  </head>
+  <body>
+    <Header />
+    <slot />
+    <Footer />
+  </body>
+</html>
