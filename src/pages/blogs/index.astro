@@ -11,8 +11,8 @@ const posts = await getCollection('blogs');
 // 2. 按日期倒序排列 (新的在前面)
 posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
-const title = "我的博客文章列表";
-const description = "这里记录了我的所有技术与生活思考";
+const title = "My blogs";
+const description = "This is where I document all my technical and life thoughts.";
 ---
 
 <PageLayout title={title} description={description}>
@@ -23,7 +23,7 @@ const description = "这里记录了我的所有技术与生活思考";
         <li>
           <a href={`/blogs/${post.slug}/`}>
             <h2>{post.data.title}</h2>
-            <p>发布时间：{post.data.pubDate.toLocaleDateString()}</p>
+            <p>Published on: {post.data.pubDate.toLocaleDateString()}</p>
           </a>
         </li>
       ))}

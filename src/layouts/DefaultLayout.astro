@@ -1,20 +1,23 @@
 ---
-// src/layouts/DefaultLayout.astro
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
-// 接收外部传入的变量
-const { title, description} = Astro.props;
+const { title, description } = Astro.props;
 ---
 
 <html lang="zh-cn">
   <head>
     <BaseHead title={title} description={description}/>
   </head>
-  <body>
+  <body class="bg-[#2d3748] min-h-screen flex flex-col">
+
     <Header />
-    <slot />
+
+    <main class="flex-1 w-full max-w-6xl mx-auto bg-white rounded-b-3xl px-4 sm:px-6 lg:px-8 py-12 mb-4 sm:mb-6 lg:mb-8 shadow-xl">
+      <slot />
+    </main>
+
     <Footer />
   </body>
 </html>

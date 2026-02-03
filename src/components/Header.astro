@@ -3,12 +3,13 @@ import HeaderLink from './HeaderLink.astro';
 import { SITE_TITLE } from '../consts';
 ---
 
-<header id="main-header">
-  <nav>
+<header id="main-header" class="fixed-header">
+  <nav id="nav-container">
     <h2><a href="/">{SITE_TITLE}</a></h2>
     <div class="internal-links">
       <HeaderLink href="/">Homepage</HeaderLink>
       <HeaderLink href="/blogs">Blogs</HeaderLink>
+      <HeaderLink href="/thoughts">Thoughts</HeaderLink>
       <HeaderLink href="/pubs">Pubs</HeaderLink>
       <HeaderLink href="/aboutMe">Me</HeaderLink>
       <HeaderLink href="/aboutWebsite">Site</HeaderLink>
@@ -17,74 +18,109 @@ import { SITE_TITLE } from '../consts';
 </header>
 
 <style>
-  header {
-    margin: 0;
-    padding: 0 1em;
-    background: white; /* 默认背景色：白色 */
-    box-shadow: 0 2px 8px rgba(var(--black), 5%);
-
-    /* 核心设置 1: 固定在顶部 */
+  /* --- 1. 外层容器设置 --- */
+  .fixed-header {
     position: sticky;
     top: 0;
-    z-index: 100; /* 保证在最上层 */
-
-    /* 核心设置 2: 颜色变化的过渡动画 */
-    transition: background-color 0.3s ease, color 0.3s ease;
+    z-index: 100;
+    width: 100%; /* 关键：始终全宽，稳如泰山 */
+    padding-top: 1rem; /* 初始状态给顶部留一点空隙 */
+    transition: padding-top 0.4s ease; /* 让顶部空隙的消失也带动画 */
+    pointer-events: none; /* 巧妙设计：让header透明区域不挡鼠标，只有nav挡 */
   }
 
-  /* 核心设置 3: 定义滚动后的样式 */
-  header.scrolled {
-    background: #2d3748; /* 滚动后变成深灰色 */
-    color: white;         /* 文字变成白色 */
-  }
-
-  /* 如果导航链接里的文字颜色没有继承 header，可能需要单独写样式 */
-  /* :global 是为了穿透组件作用域去影响子组件 HeaderLink */
-  header.scrolled :global(a) {
-    color: white;
-  }
-
-  h2 {
-    margin: 0;
-    font-size: 1em;
-  }
-  h2 a,
-  h2 a.active {
-    text-decoration: none;
-  }
+  /* --- 2. 内层视觉容器设置 --- */
   nav {
+    pointer-events: auto; /* 恢复鼠标交互 */
+
+    /* 初始形态：白色胶囊 */
+    background: white;
+    color: var(--black);
+
+    /* 布局定位 */
+    margin: 0 auto; /* 居中 */
     display: flex;
     align-items: center;
     justify-content: space-between;
-  }
-  nav a {
-    padding: 1em 0.5em;
-    color: var(--black);
-    border-bottom: 4px solid transparent;
-    text-decoration: none;
-    }
-    nav a.active {
-    text-decoration: none;
-    border-bottom-color: var(--accent);
-    }
+    padding: 0 1.5em; /* 稍微加大内边距 */
+    height: 4rem;
 
+    /* 关键动画属性 */
+    max-width: 72rem; /* 对应 max-w-6xl，与你的 layout 一致 */
+    border-radius: 1.5rem 1.5rem 0 0; /* 上圆下直 */
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+
+    /* 贝塞尔曲线：让动画更有质感 (先快后慢) */
+    transition:
+      max-width 0.5s cubic-bezier(0.25, 1, 0.5, 1),
+      background-color 0.4s ease,
+      border-radius 0.4s ease,
+      color 0.4s ease;
+  }
+
+  h2 { margin: 0; font-size: 1em; }
+  h2 a { text-decoration: none; color: inherit; transition: color 0.3s; }
+
+  .internal-links a {
+    padding: 1em 0.5em;
+    color: inherit; /* 继承 nav 的颜色 */
+    text-decoration: none;
+    border-bottom: 3px solid transparent;
+    transition: border-color 0.3s;
+  }
+  .internal-links a.active {
+    border-bottom-color: var(--accent);
+  }
+
+  /* --- 3. 滚动后的状态 (由 JS 触发) --- */
+
+  /* 外层去处顶部留白 */
+  :global(.scrolled) .fixed-header {
+    padding-top: 0;
+  }
+
+  /* 内层变形 */
+/* --- 滚动后的状态：液态深色玻璃 --- */
+  :global(.scrolled) nav {
+    max-width: 100%;
+    border-radius: 0;
+
+    /* 1. 背景色：使用 rgba 版本的 #2d3748，透明度 0.85 */
+    /* 这让背景隐约可见，但文字依然清晰 */
+    background: rgba(45, 55, 72, 0.85);
+
+    /* 2. 核心魔法：背景模糊 + 饱和度提升 */
+    /* blur: 模糊背景内容，形成景深 */
+    /* saturate: 提升背后透出颜色的鲜艳度，防止模糊后颜色发灰 (Apple 的秘诀) */
+    backdrop-filter: saturate(180%) blur(16px);
+    -webkit-backdrop-filter: saturate(180%) blur(16px); /* Safari 兼容 */
+
+    /* 3. 边框高光：在底部加一根极细的半透明白线 */
+    /* 这模拟了光线打在玻璃边缘的反光，显著增加立体感 */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+    color: white;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); /* 更柔和、扩散更远的阴影 */
+  }
+
+  /* 解决滚动时下划线颜色的微调 */
+  :global(.scrolled) .internal-links a.active {
+    border-bottom-color: white;
+  }
 </style>
 
 <script is:inline>
-  // is:inline 告诉 Astro 这段 JS 不需要打包，直接扔给浏览器执行
-
   const header = document.getElementById('main-header');
+  const nav = document.getElementById('nav-container');
 
   function handleScroll() {
-    if (window.scrollY > 0) {
-      // 只要滚动了哪怕 1px，就加上 class
-      header.classList.add('scrolled');
+    // 滚动超过 10px 即触发，避免过于敏感
+    if (window.scrollY > 10) {
+      document.body.classList.add('scrolled');
     } else {
-      // 回到顶部，移除 class
-      header.classList.remove('scrolled');
+      document.body.classList.remove('scrolled');
     }
   }
 
-  // 监听滚动事件
   window.addEventListener('scroll', handleScroll);
 </script>
