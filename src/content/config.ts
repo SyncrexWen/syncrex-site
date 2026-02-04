@@ -17,9 +17,18 @@ const blogCollection = defineCollection({
         isDraft: z.boolean().default(false),
     }),
 });
+const tracesCollection = defineCollection({
+    type: 'content',
+    schema: ({ image }) => z.object({
+        date: z.date(), // 发布时间
+        // 允许没有图片，或者有多张图片
+        images: z.array(image()).optional(),
+    }),
+});
 
 // 3. 导出集合对象
 // 这里的键名 'blogs' 必须和你 src/content/ 下的文件夹名完全一致！
 export const collections = {
     'blogs': blogCollection,
+    'traces': tracesCollection,
 };

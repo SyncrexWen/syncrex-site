@@ -1,0 +1,36 @@
+---
+// src/components/TableOfContents.astro
+const { headings } = Astro.props;
+
+// 1. 确保 headings 存在
+// 2. 过滤掉 H1 (depth 1) 和过深的标题 (depth > 3)
+const toc = (headings || []).filter((h: any) => h.depth > 1 && h.depth < 4);
+---
+
+{toc.length > 0 ? (
+  <nav class="toc-nav">
+    <ul class="space-y-2">
+      {toc.map((heading: any) => (
+        <li class={`toc-item depth-${heading.depth}`}>
+          <a
+            href={`#${heading.slug}`}
+            class="block text-sm text-gray-500 hover:text-[#2d3748] transition-colors duration-200 truncate"
+            title={heading.text}
+          >
+            {heading.text}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+) : (
+  <p class="text-xs text-gray-400 italic">No contents</p>
+)}
+
+<style>
+  /* 简单的缩进逻辑 */
+  .depth-3 {
+    padding-left: 1rem;
+    font-size: 0.8rem;
+  }
+</style>

@@ -31,7 +31,9 @@ const today = new Date();
         </div>
 
         <div class="copyright">
-            &copy; {today.getFullYear()} Kangcheng Wen. All rights reserved.
+            &copy;
+            <a href="/traces" class="secret-year">{today.getFullYear()}</a>
+            Kangcheng Wen. All rights reserved.
         </div>
     </div>
 </footer>
@@ -115,5 +117,24 @@ const today = new Date();
         font-size: 0.75rem;
         color: #475569; /* Slate-600，融入背景 */
         font-family: monospace; /* 代码体看起来更像元数据 */
+    }
+
+    /* 修改你的 .secret-year 样式 */
+    .secret-year {
+        color: inherit;
+        text-decoration: none;
+        /* 默认状态下，没有任何延迟，保证鼠标移开时效果瞬间消失 */
+        transition: all 0s;
+        cursor: text; /* 默认是文本光标，伪装到底 */
+    }
+
+    .secret-year:hover {
+        color: #cbd5e1;
+        text-shadow: 0 0 5px rgba(255,255,255,0.5);
+        cursor: help;
+
+        /* 核心魔法：transition-delay */
+        /* 意思是：当你 hover 时，等 1s 再开始执行上面的变化 */
+        transition-delay: 1s;
     }
 </style>

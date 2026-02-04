@@ -40,3 +40,6 @@ console.log("Hello, Astro!");
 function test() {
   return true;
 }
+```
+
+Placeholder paragraph: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.

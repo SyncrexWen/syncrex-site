@@ -1,0 +1,175 @@
+---
+// 1. 引入必要的类型定义
+import type { GetStaticPaths, Page } from "astro";
+import { getCollection, type CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
+
+// 2. 为 getStaticPaths 加上类型签名
+export const getStaticPaths = (async ({ paginate }) => {
+    // 获取所有吐槽
+    const allTraces = await getCollection('traces');
+
+    // 按时间倒序排列
+    const sortedTraces = allTraces.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+    // 生成分页
+    return paginate(sortedTraces, { pageSize: 10 });
+}) satisfies GetStaticPaths;
+
+// 3. 定义组件的 Props 类型
+// 告诉 TS：这个页面接收一个叫 'page' 的属性
+// 它的结构是 Page，里面装的是 'traces' 集合的内容
+interface Props {
+    page: Page<CollectionEntry<'traces'>>;
+}
+
+const { page } = Astro.props;
+---
+
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traces | 碎片</title>
+
+    <style>
+        /* 简单的 Reset */
+        body { background: #1a202c; color: #e2e8f0; font-family: sans-serif; margin: 0; padding: 2rem 1rem; }
+        .container { max-width: 600px; margin: 0 auto; }
+        .back-link { color: #718096; text-decoration: none; margin-bottom: 2rem; display: inline-block; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        {page.currentPage === 1 && <a href="/" class="back-link">← Return to Reality</a>}
+
+        <div class="timeline">
+            {page.data.map((trace) => (
+                <article class="trace-item">
+
+                    {/* 1. 时间戳 */}
+                    <div class="trace-meta">
+                        <time datetime={trace.data.date.toISOString()}>
+                            {trace.data.date.toLocaleDateString('zh-CN', {
+                                month: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit'
+                            })}
+                        </time>
+                    </div>
+
+                    {/* 2. 文字内容 */}
+                    <div class="trace-content">
+                        {/* 注意：trace.body 是原始 Markdown 文本。
+                            如果你想渲染成 HTML，不能直接用 {trace.body}。
+                            但为了保持极简，这里显示纯文本也是一种风格。
+                            如果需要渲染 markdown，需要用 <Content /> 组件 (比较复杂) 或 marked 库 */}
+                        {trace.body}
+                    </div>
+
+                    {/* 3. 图片画廊 */}
+                    {trace.data.images && trace.data.images.length > 0 && (
+                        <div class="gallery-scroll">
+                            {trace.data.images.map((img) => (
+                                <div class="gallery-item">
+                                    <Image
+                                        src={img}
+                                        alt="Trace moment"
+                                        width={600}
+                                        quality={80}
+                                        class="gallery-img"
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </article>
+            ))}
+        </div>
+
+        {/* 4. 加载更多按钮 */}
+        {page.url.next && (
+            <div class="load-more-container">
+                <button
+                    hx-get={page.url.next}
+                    hx-select=".timeline > *, .load-more-container"
+                    hx-swap="outerHTML"
+                    class="load-more-btn"
+                >
+                    Load Previous Moments
+                </button>
+            </div>
+        )}
+    </div>
+</body>
+</html>
+
+<style>
+    /* ... 保持你原有的 CSS 不变 ... */
+    .trace-item {
+        margin-bottom: 3rem;
+        padding-bottom: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .trace-meta {
+        font-size: 0.85rem;
+        color: #718096;
+        margin-bottom: 0.5rem;
+        font-family: monospace;
+    }
+    .trace-content {
+        font-size: 1.1rem;
+        line-height: 1.6;
+        margin-bottom: 1rem;
+        white-space: pre-wrap;
+    }
+    .gallery-scroll {
+        display: flex;
+        gap: 1rem;
+        overflow-x: auto;
+        padding-bottom: 1rem;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+    }
+    .gallery-scroll::-webkit-scrollbar {
+        display: none;
+    }
+    .gallery-item {
+        flex: 0 0 85%;
+        scroll-snap-align: center;
+        border-radius: 12px;
+        overflow: hidden;
+        position: relative;
+        max-height: 500px;
+    }
+    .gallery-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+    .gallery-item:active .gallery-img {
+        transform: scale(1.02);
+    }
+    .load-more-btn {
+        background: transparent;
+        border: 1px solid #4a5568;
+        color: #a0aec0;
+        padding: 0.8rem 2rem;
+        border-radius: 99px;
+        cursor: pointer;
+        width: 100%;
+        transition: all 0.2s;
+    }
+    .load-more-btn:hover {
+        background: rgba(255,255,255,0.05);
+        color: #fff;
+    }
+</style>
+
+<script>
+    // 既然你在用 NPM 方式引入，这段代码是正确的
+    import htmx from 'htmx.org';
+
+    // TS 可能会在这里报错说 Window 上没有 htmx 属性，可以强行转换一下或者忽略
+    // @ts-ignore
+    window.htmx = htmx;
+</script>

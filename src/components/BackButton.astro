@@ -1,0 +1,118 @@
+---
+interface Props {
+  href: string;
+  text?: string;
+  /** * 'dark': 用于深色背景 (白色文字)
+   * 'light': 用于白色背景 (深色文字)
+   */
+  theme?: 'dark' | 'light';
+}
+
+// 默认设置为 light，因为你当前是在白色区域使用
+const { href, text = "Back", theme = 'light' } = Astro.props;
+---
+
+<a href={href} class:list={["back-button group", theme]}>
+  <div class="icon-wrapper">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="20" height="20" viewBox="0 0 24 24"
+      fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round"
+      class="arrow-main"
+    >
+      <line x1="19" y1="12" x2="5" y2="12"></line>
+      <polyline points="12 19 5 12 12 5"></polyline>
+    </svg>
+
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="20" height="20" viewBox="0 0 24 24"
+      fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round"
+      class="arrow-clone"
+    >
+      <line x1="19" y1="12" x2="5" y2="12"></line>
+      <polyline points="12 19 5 12 12 5"></polyline>
+    </svg>
+  </div>
+
+  <span class="label">{text}</span>
+</a>
+
+<style>
+  .back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 1.2rem;
+    text-decoration: none;
+    border-radius: 99px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* ============================
+     THEME: Light (用于白色背景)
+     设计思路：平常是深灰色轮廓，悬浮时变成实心深色
+     ============================ */
+  .back-button.light {
+    background: transparent;
+    /* 使用 rgba 的 #2d3748，透明度 0.15 作为边框，显得精致 */
+    border: 1px solid rgba(45, 55, 72, 0.2);
+    color: #2d3748; /* 你的主色调 */
+  }
+
+  .back-button.light:hover {
+    background: #2d3748; /* 悬浮时填充主色 */
+    border-color: #2d3748;
+    color: #ffffff; /* 文字反白 */
+    box-shadow: 0 4px 12px rgba(45, 55, 72, 0.2);
+    transform: translateX(-4px);
+  }
+
+  /* ============================
+     THEME: Dark (用于深色背景)
+     保留之前的设计
+     ============================ */
+  .back-button.dark {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .back-button.dark:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    transform: translateX(-4px);
+  }
+
+  /* ============================
+     动画逻辑 (通用)
+     ============================ */
+  .icon-wrapper {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  svg {
+    position: absolute;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s;
+  }
+
+  .arrow-main { transform: translateX(0); opacity: 1; }
+  .arrow-clone { transform: translateX(20px); opacity: 0; }
+
+  .back-button:hover .arrow-main { transform: translateX(-20px); opacity: 0; }
+  .back-button:hover .arrow-clone { transform: translateX(0); opacity: 1; }
+</style>

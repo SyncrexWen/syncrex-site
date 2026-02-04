@@ -1,7 +1,7 @@
 ---
 // src/pages/blogs/[...slug].astro
 import { getCollection } from 'astro:content';
-import DefaultLayout from '../../layouts/DefaultLayout.astro';
+import BlogPostLayout from '../../layouts/BlogPostLayout.astro';
 
 // 1. 核心函数：getStaticPaths
 // 因为 Astro 默认是静态构建 (SSG)，它必须在打包时知道所有可能的路径。
@@ -23,20 +23,19 @@ const post = Astro.props;
 
 // 3. 渲染 Markdown 内容
 // Astro 会把 Markdown 正文转换成 <Content /> 组件
-const { Content } = await post.render();
+const { Content, headings } = await post.render();
 ---
 
-<DefaultLayout
+<BlogPostLayout
     title={post.data.title}
     description={post.data.description}
+    pubDate={post.data.pubDate}
+    headings={headings}
 >
   <article>
-    <h1>{post.data.title}</h1>
-    <hr />
-
     {/* 4. 插入 Markdown 正文 */}
-    <div class="prose">
+    <div>
         <Content />
     </div>
   </article>
-</DefaultLayout>
+</BlogPostLayout>
