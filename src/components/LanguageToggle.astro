@@ -1,0 +1,200 @@
+---
+// src/components/LanguageToggle.astro
+interface Props {
+  lockedLang?: 'zh' | 'en';
+}
+
+const { lockedLang } = Astro.props;
+
+const tooltipText = lockedLang === 'zh'
+  ? "English translation not available"
+  : "暂无中文版本";
+---
+
+<button
+  id="lang-toggle"
+  class:list={["focus-switch group", { "is-locked": !!lockedLang }]}
+  aria-label="Switch Language"
+  data-locked={lockedLang}
+  disabled={!!lockedLang}
+>
+  <span class="lang-item zh">中文</span>
+  <span class="divider">/</span>
+  <span class="lang-item en">EN</span>
+
+  {lockedLang && (
+    <span class="tooltip-popup" aria-hidden="true">
+      {tooltipText}
+    </span>
+  )}
+
+  <div class="glow-bg"></div>
+</button>
+
+<style>
+  /* === 1. 容器设计 (保持不变) === */
+  .focus-switch {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 99px;
+    border: 1px solid rgba(45, 55, 72, 0.1);
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: visible;
+  }
+
+  .focus-switch:not(.is-locked) { cursor: pointer; }
+  .focus-switch:not(.is-locked):hover {
+    background: rgba(255, 255, 255, 0.8);
+    border-color: rgba(45, 55, 72, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  }
+  .focus-switch.is-locked {
+    cursor: not-allowed;
+    opacity: 0.8;
+  }
+
+  /* === 2. 字体与状态样式 === */
+  .lang-item {
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    position: relative;
+    z-index: 10;
+    transition: color 0.3s ease, opacity 0.3s ease, filter 0.3s ease, transform 0.3s ease;
+    will-change: filter, opacity;
+  }
+
+  .divider {
+    color: #cbd5e0;
+    font-size: 0.875rem;
+    font-weight: 300;
+    transform: translateY(-1px);
+  }
+
+  /* === 3. 状态逻辑 (核心修复) === */
+
+  /* 关键修改 A: 将 body 改为 :root (即 html)。
+     因为 BaseHead 中的阻塞脚本是给 html 加属性的，这样 CSS 能够立刻匹配，无需等待。
+  */
+
+  /* ---> 默认状态 或 中文激活 <--- */
+  /* :not([data-lang]) 确保了即使脚本完全没跑，也默认显示为中文选中状态，防止白屏闪烁 */
+  :global(:root:not([data-lang])) .zh,
+  :global(:root[data-lang="zh"]) .zh {
+    color: #2d3748;
+    opacity: 1;
+    filter: blur(0);
+    transform: scale(1.05);
+  }
+  :global(:root:not([data-lang])) .en,
+  :global(:root[data-lang="zh"]) .en {
+    color: #a0aec0;
+    opacity: 0.4;
+    filter: blur(1.5px);
+    font-weight: 500;
+  }
+
+  /* ---> 英文激活 <--- */
+  :global(:root[data-lang="en"]) .en {
+    color: #2d3748;
+    opacity: 1;
+    filter: blur(0);
+    transform: scale(1.05);
+  }
+  :global(:root[data-lang="en"]) .zh {
+    color: #a0aec0;
+    opacity: 0.4;
+    filter: blur(1.5px);
+    font-weight: 500;
+  }
+
+  /* === 4. Hover 交互逻辑 (同步修改为 :root) === */
+
+  /* A. 正常模式 */
+  .focus-switch:not(.is-locked):hover .lang-item {
+    filter: blur(0) !important;
+    opacity: 0.8;
+  }
+  /* 保持高亮 */
+  :global(:root[data-lang="zh"]) .focus-switch:not(.is-locked):hover .zh { opacity: 1; }
+  :global(:root[data-lang="en"]) .focus-switch:not(.is-locked):hover .en { opacity: 1; }
+
+
+  /* B. 锁定模式 */
+  :global(:root[data-lang="zh"]) .focus-switch.is-locked:hover .en {
+    filter: blur(2px) !important;
+    opacity: 0.3 !important;
+  }
+  :global(:root[data-lang="en"]) .focus-switch.is-locked:hover .zh {
+    filter: blur(2px) !important;
+    opacity: 0.3 !important;
+  }
+
+  /* === 5. Tooltip (保持不变) === */
+  .tooltip-popup {
+    position: absolute;
+    top: 120%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-10px);
+    background-color: #2d3748;
+    color: #fff;
+    font-size: 0.75rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+    z-index: 20;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+  .tooltip-popup::after {
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent #2d3748 transparent;
+  }
+  .focus-switch.is-locked:hover .tooltip-popup {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
+</style>
+
+<script>
+  import { currentLang } from '../stores/language';
+
+  const btn = document.getElementById('lang-toggle');
+
+  if (btn) {
+    const lockedLang = btn.dataset.locked;
+
+    if (lockedLang && (lockedLang === 'zh' || lockedLang === 'en')) {
+      if (currentLang.get() !== lockedLang) {
+        currentLang.set(lockedLang);
+      }
+    } else {
+      // 此处逻辑保持不变，因为我们主要依赖 BaseHead 里的初始化
+      // 但为了后续交互一致性，保持监听即可
+      currentLang.subscribe(lang => {
+        document.documentElement.setAttribute('data-lang', lang);
+      });
+
+      btn.addEventListener('click', () => {
+        const newLang = currentLang.get() === 'zh' ? 'en' : 'zh';
+        currentLang.set(newLang);
+      });
+    }
+  }
+</script>

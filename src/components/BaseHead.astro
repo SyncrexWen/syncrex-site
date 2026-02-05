@@ -1,77 +1,39 @@
 ---
-// 1. 引入全局样式
+// src/components/BaseHead.astro
 import '../styles/global.css';
+// ... (其他 imports 和 props 保持不变) ...
 
-// 2. 引入必要的类型和常量
-import type { ImageMetadata } from 'astro';
-import { SITE_TITLE } from '../consts';
-
-interface Props {
-  title: string;
-  description: string;
-}
-
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
-
-// 3. 解构 Props，设置默认值
-// 注意：这里假设你有一张默认的分享图放在 public/social-card.jpg (或者 assets 中)
-const { title, description} = Astro.props;
-
-// 处理 image 路径：如果是对象(import进来的)则取 src，如果是字符串直接使用
-const socialImageURL = new URL('/default-og.png', Astro.site);
+const { title, description } = Astro.props;
+// ...
 ---
 
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<meta name="generator" content={Astro.generator} />
+<style is:global>
+  /* 默认/初始状态：如果没有 data-lang，优先隐藏英文 */
+  :root:not([data-lang]) .lang-en,
+  :root:not([data-lang]) .hidden-when-zh {
+    display: none !important;
+  }
 
-<link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
-<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-<link rel="shortcut icon" href="/favicon.ico" />
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-<meta name="apple-mobile-web-app-title" content="MyWebSite" />
-<link rel="manifest" href="/site.webmanifest" />
+  /* 当 html="zh" 时，隐藏 .lang-en 和 .hidden-when-zh */
+  :root[data-lang="zh"] .lang-en,
+  :root[data-lang="zh"] .hidden-when-zh {
+    display: none !important;
+  }
 
-<link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin />
-
-<link rel="canonical" href={canonicalURL} />
-
-<title>{SITE_TITLE} | {title}</title>
-<meta name="title" content={`${title} | ${SITE_TITLE}`} />
-<meta name="description" content={description} />
+  /* 当 html="en" 时，隐藏 .lang-zh 和 .hidden-when-en */
+  :root[data-lang="en"] .lang-zh,
+  :root[data-lang="en"] .hidden-when-en {
+    display: none !important;
+  }
+</style>
 
 <script is:inline>
-  // 这段脚本会在页面内容渲染前立即执行，防止页面由白变黑的"闪烁"
-  const getThemePreference = () => {
-    if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
-      return localStorage.getItem('theme');
+  (function() {
+    try {
+      var lang = localStorage.getItem('site-lang') || 'zh';
+      document.documentElement.setAttribute('data-lang', lang);
+    } catch (e) {
+      document.documentElement.setAttribute('data-lang', 'zh');
     }
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-  };
-  const isDark = getThemePreference() === 'dark';
-  document.documentElement.classList[isDark ? 'add' : 'remove']('dark');
-
-  if (typeof localStorage !== 'undefined') {
-    // 观察者模式：监听系统主题变化
-    const observer = new MutationObserver(() => {
-      const isDark = document.documentElement.classList.contains('dark');
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    });
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
-  }
+  })();
 </script>
-
-<meta property="og:type" content="website" />
-<meta property="og:url" content={Astro.url} />
-<meta property="og:title" content={title} />
-<meta property="og:description" content={description} />
-<meta property="og:image" content={socialImageURL} />
-
-<meta property="twitter:card" content="summary_large_image" />
-<meta property="twitter:url" content={Astro.url} />
-<meta property="twitter:title" content={title} />
-<meta property="twitter:description" content={description} />
-<meta property="twitter:image" content={socialImageURL} />
-
-<link rel="sitemap" href="/sitemap-index.xml" />
-<link rel="alternate" type="application/rss+xml" title={SITE_TITLE} href={new URL('rss.xml', Astro.site)} />

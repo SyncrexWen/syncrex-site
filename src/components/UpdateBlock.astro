@@ -1,0 +1,68 @@
+---
+interface UpdateItem {
+  date: Date;
+  content: string;
+  type?: 'correction' | 'update' | 'note';
+}
+
+interface Props {
+  updates?: UpdateItem[];
+}
+
+const { updates = [] } = Astro.props;
+
+// 如果没有更新，直接不渲染
+if (updates.length === 0) return null;
+
+// 按日期倒序排列
+const sortedUpdates = updates.sort((a, b) => b.date.valueOf() - a.date.valueOf());
+const latest = sortedUpdates[0];
+const hasHistory = sortedUpdates.length > 1;
+
+const typeStyles = {
+    correction: { label: 'Correction', color: 'text-red-600', bg: 'bg-red-50', border: 'border-red-200' },
+    update: { label: 'Update', color: 'text-blue-600', bg: 'bg-blue-50', border: 'border-blue-200' },
+    note: { label: 'Note', color: 'text-amber-600', bg: 'bg-amber-50', border: 'border-amber-200' },
+};
+
+const style = typeStyles[latest.type || 'update'];
+---
+
+<div class={`my-8 p-4 rounded-lg border-l-4 ${style.bg} ${style.border} not-prose`}>
+    <div class="flex items-start gap-3">
+        <span class={`mt-0.5 text-lg ${style.color}`}>
+            {latest.type === 'correction' ? 'Fix' : latest.type === 'note' ? 'Note' : 'Update'}
+        </span>
+
+        <div class="flex-1">
+            <div class="flex items-baseline gap-2 mb-1">
+                <span class={`text-xs font-bold uppercase tracking-wider ${style.color}`}>
+                    {style.label}
+                </span>
+                <span class="text-xs text-gray-500 font-mono">
+                    {latest.date.toLocaleDateString('zh-CN')}
+                </span>
+            </div>
+            <p class="text-sm text-gray-700 leading-relaxed">
+                {latest.content}
+            </p>
+
+            {hasHistory && (
+                 <details class="mt-2 group">
+                    <summary class="text-xs text-gray-400 cursor-pointer hover:text-gray-600 list-none flex items-center gap-1 transition-colors">
+                        <span>View previous updates ({sortedUpdates.length - 1})</span>
+                        <svg class="w-3 h-3 transition-transform group-open:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+                    </summary>
+                    <ul class="mt-2 space-y-2 border-t border-gray-200/50 pt-2">
+                        {sortedUpdates.slice(1).map(u => (
+                            <li class="text-xs text-gray-500 flex gap-2">
+                                <span class="font-mono opacity-70 whitespace-nowrap">{u.date.toLocaleDateString('zh-CN')}</span>
+                                <span>{u.content}</span>
+                            </li>
+                        ))}
+                    </ul>
+                 </details>
+            )}
+        </div>
+    </div>
+</div>

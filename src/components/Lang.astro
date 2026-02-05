@@ -1,0 +1,18 @@
+---
+// src/components/Lang.astro
+interface Props {
+  is: 'zh' | 'en';
+}
+const { is } = Astro.props;
+---
+<div class={`lang-content lang-${is}`}>
+    <slot />
+</div>
+
+<style>
+  /* 只有当我们需要特定的行内布局时才写样式，否则留空 */
+  .lang-content {
+      /* 确保它是块级或行内块，视情况而定 */
+      display: contents; /* 推荐：这样 div 本身不参与布局，只渲染里面的文字 */
+  }
+</style>

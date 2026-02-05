@@ -1,0 +1,56 @@
+---
+// src/components/timeline/TimelineYearGroup.astro
+import TimelineItem from './TimelineItem.astro';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  year: number;
+  posts: CollectionEntry<any>[];
+  slugBase: string;
+}
+
+const { year, posts, slugBase } = Astro.props;
+
+// ... (数据处理逻辑保持不变) ...
+// 简略：按月份分组逻辑
+const postsByMonth = posts.reduce((acc, post) => {
+  const month = post.data.pubDate.getMonth();
+  if (!acc[month]) acc[month] = [];
+  acc[month].push(post);
+  return acc;
+}, {} as Record<number, typeof posts>);
+
+const sortedMonths = Object.keys(postsByMonth).map(Number).sort((a, b) => b - a);
+---
+
+<section class="relative animate-fade-in-up">
+
+  <div class="sticky top-0 z-20 bg-white/60 backdrop-blur-md py-2 mb-4 -mx-4 px-4 rounded-b-xl transition-all">
+    <div class="relative">
+      <span class="text-xl font-bold text-slate-700 pl-1 inline-block mt-1">{year}</span>
+    </div>
+  </div>
+
+  <div class="flex flex-col gap-6"> {sortedMonths.map((monthIndex) => {
+      const monthPosts = postsByMonth[monthIndex];
+      const monthName = new Date(2000, monthIndex).toLocaleString('en-US', { month: 'short' }).toUpperCase();
+
+      return (
+        <div class="flex relative group/month">
+
+          <div class="w-14 flex-shrink-0 flex flex-col items-center pt-1">
+            <span class="text-xs font-bold font-mono text-slate-400 tracking-wider">
+              {monthName}
+            </span>
+            <div class="h-full w-[1px] bg-slate-100 mt-2 group-hover/month:bg-slate-200 transition-colors"></div>
+          </div>
+
+          <div class="flex-1 flex flex-col gap-2 pb-6"> {monthPosts.map((post) => (
+              <TimelineItem post={post} slugBase={slugBase} />
+            ))}
+          </div>
+        </div>
+      );
+    })}
+  </div>
+</section>

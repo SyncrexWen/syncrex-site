@@ -3,6 +3,7 @@
 import DefaultLayout from './DefaultLayout.astro';
 import BackButton from '../components/BackButton.astro';
 import TableOfContents from '../components/TableOfContents.astro';
+import UpdateBlock from '../components/UpdateBlock.astro';
 
 // 1. 定义类型接口，提升代码健壮性
 interface Props {
@@ -12,9 +13,14 @@ interface Props {
   updatedDate?: Date;
   headings?: { depth: number; slug: string; text: string }[];
   heroImage?: string;
+  updates?: {
+    date: Date;
+    content: string;
+    type?: 'correction' | 'update' | 'note';
+  }[];
 }
 
-const { title, description, pubDate, updatedDate, headings = [] } = Astro.props;
+const { title, description, pubDate, updatedDate, headings = [], updates = [] } = Astro.props;
 
 const formatDate = (date: Date | string) => {
   const d = new Date(date);
@@ -52,6 +58,8 @@ const formatDate = (date: Date | string) => {
           <p class="text-gray-600 italic text-lg leading-relaxed m-0">{description}</p>
         </div>
       )}
+
+      <UpdateBlock updates={updates} />
     </header>
 
     <article class="prose prose-lg prose-slate mx-auto max-w-none">
@@ -59,7 +67,7 @@ const formatDate = (date: Date | string) => {
     </article>
 
     <div class="mt-16 pt-8 border-t border-gray-100 text-center text-gray-400 text-sm">
-      <p>Thanks for reading.</p>
+      <p>THANKS FOR READING.</p>
     </div>
 
   </div>

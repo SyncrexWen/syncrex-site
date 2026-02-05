@@ -1,0 +1,55 @@
+---
+// src/layouts/CollectionLayout.astro
+import PageLayout from './PageLayout.astro';
+import TimelineYearGroup from '../components/TimelineYearGroup.astro';
+import type { CollectionEntry } from 'astro:content';
+
+type BilingualString = string | { zh: string; en: string };
+
+interface Props {
+title: BilingualString;       // <--- 更新
+  description?: BilingualString; // <--- 更新
+  items: CollectionEntry<any>[]; // 传入原始数据
+  slugBase: string; // 'blogs' | 'thoughts'
+}
+
+const { title, description, items, slugBase } = Astro.props;
+
+// === 数据处理：按年份分组 ===
+const postsByYear: Record<number, typeof items> = items.reduce((acc: Record<number, typeof items>, post: any) => {
+  const year = post.data.pubDate.getFullYear();
+  if (!acc[year]) acc[year] = [];
+  acc[year].push(post);
+  return acc;
+}, {} as Record<number, typeof items>);
+
+// 年份倒序 (2024 -> 2023)
+const sortedYears = Object.keys(postsByYear)
+  .map(Number)
+  .sort((a, b) => b - a);
+---
+
+<PageLayout title={title} description={description}>
+
+  <div class="w-full max-w-3xl mx-auto mt-8 relative">
+
+    <div class="absolute left-[3.85rem] top-0 bottom-0 w-px bg-slate-100 -z-10 hidden sm:block"></div>
+
+    <div class="flex flex-col gap-12">
+      {sortedYears.map((year) => (
+        <TimelineYearGroup
+          year={year}
+          posts={postsByYear[year]}
+          slugBase={slugBase}
+        />
+      ))}
+    </div>
+
+    {items.length === 0 && (
+      <div class="text-center py-20 text-slate-400">
+        <p>No content found.</p>
+      </div>
+    )}
+
+  </div>
+</PageLayout>

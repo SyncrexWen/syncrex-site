@@ -1,42 +1,32 @@
 ---
-title: "我的第二篇测试博客"
-description: "这是用于测试 Astro 博客系统搭建是否成功的样板文章，包含了各种 Markdown 格式。"
-pubDate: 2024-02-01
+title: "TypeScript泛型完全指南"
+description: "TypeScript泛型提供了强大的类型抽象能力，本文将全面介绍泛型的各种用法"
+pubDate: 2024-05-22T14:00:00
+updatedDate: 2024-05-25T11:20:00
 isDraft: false
+updates:
+  - date: 2024-05-23T16:45:00
+    content: "补充了条件类型的内容"
+    type: update
+  - date: 2024-05-24T10:30:00
+    content: "添加了更多实用示例"
+    type: update
+  - date: 2024-05-25T11:20:00
+    content: "修正了映射类型部分的错误"
+    type: correction
 ---
 
-# 这是一级标题 (H1)
+## 泛型基础
 
-你好！如果你能看到这就话，说明你的 **Astro 博客系统已经完美跑通了**！🎉
+泛型允许我们创建可重用的组件，一个组件可以支持多种类型的数据。
 
-这里是正文区域。你之前配置的 `BaseHead` 应该已经生效，页面标题栏应该变成了 `我的第一篇测试博客 | 你的网站名称`。
+## 高级泛型技巧
 
-## 二级标题：测试文本格式
+- 泛型约束
+- 泛型默认类型
+- 条件类型
+- 映射类型
 
-下面是一些常用的 Markdown 语法测试：
+## 实际应用
 
--   **加粗文本** 用于强调重点。
--   *斜体文本* 用于次要强调。
--   [这是一个链接](https://astro.build)，它应该指向 Astro 官网。
-
-### 三级标题：测试列表
-
-1.  有序列表项 1
-2.  有序列表项 2
-3.  有序列表项 3
-
-> 这是一个引用块（Blockquote）。
-> 通常用于引用别人的话或者作为提示信息。
-> 如果你引入了 `@tailwindcss/typography`，这个块应该会有一个灰色的左边框。
-
-## 代码块测试
-
-如果你要在博客里写代码，它们应该长这样：
-
-```javascript
-// 这是一个 JavaScript 代码块
-console.log("Hello, Astro!");
-
-function test() {
-  return true;
-}
+在React组件、状态管理库和API客户端中使用泛型可以大大提升代码的类型安全性。

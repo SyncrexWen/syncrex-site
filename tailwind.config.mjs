@@ -5,9 +5,15 @@ export default {
   content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
   theme: {
     extend: {
+      // tailwind.config.mjs
       fontFamily: {
-        serif: ['Noto Serif SC', 'serif'],
-        sans: ['Noto Sans SC', 'sans-serif'],
+        // 标题 - 典雅衬线
+        serif: ['Cormorant Garamond', 'Noto Serif SC', 'serif'],
+
+        // 正文/描述 - 现代极简
+        sans: ['Inter', 'Noto Sans SC', 'sans-serif'],
+
+        // 代码 - 保持不变
         mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
       },
       // 定义一组自定义颜色，方便统一管理（可选）

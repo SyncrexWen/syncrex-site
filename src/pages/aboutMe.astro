@@ -1,8 +1,17 @@
 ---
 import PageLayout from "../layouts/PageLayout.astro"
+
+const pageTitle = {
+    zh: "关于我",
+    en: "About Me"
+}
+const pageDesc = {
+    zh: "关于我的一些信息。",
+    en: "Information about me."
+}
 ---
 
-<PageLayout title="About Me" description="Information about me.">
+<PageLayout title={pageTitle} description={pageDesc}>
     <h1>About Me</h1>
     <p>This is a placeholder page for information about me. Content will be added here in the future.</p>
 </PageLayout>

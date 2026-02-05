@@ -1,0 +1,32 @@
+---
+// src/pages/thoughts/[...slug].astro
+import { getCollection } from 'astro:content';
+// 如果你想用专门的 Layout，可以换成 PageLayout，或者继续复用 BlogPostLayout
+import BlogPostLayout from '../../layouts/BlogPostLayout.astro';
+
+export async function getStaticPaths() {
+  const thoughts = await getCollection('thoughts');
+
+  return thoughts.map((thought) => ({
+
+    params: { slug: thought.slug },
+    props: thought,
+  }));
+}
+
+// 获取当前页面的数据
+const thought = Astro.props;
+
+// 渲染 Markdown 内容
+const { Content, headings } = await thought.render();
+---
+
+<BlogPostLayout
+    title={thought.data.title}
+    description={thought.data.description}
+    pubDate={thought.data.pubDate}
+    headings={headings}
+    updates={thought.data.updates}
+>
+  <Content />
+</BlogPostLayout>
