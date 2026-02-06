@@ -1,5 +1,18 @@
 ---
 // src/layouts/CollectionLayout.astro
+
+/**
+ * CollectionLayout
+ * This layout is designed for displaying a collection of items (like blog posts or thoughts) grouped by year.
+ * It takes a list of items, groups them by their publication year, and renders them using the TimelineYearGroup component.
+ * The layout also includes a title and description for the collection, which can be provided in both Chinese and English.
+ * Props:
+ * - title: The title of the collection, which can be a bilingual string (either a simple string or an object with 'zh' and 'en' properties).
+ * - description: A brief description of the collection, also supporting bilingual content.
+ * - items: An array of content entries (blog posts or thoughts) that will be displayed in the timeline.
+ * - slugBase: A string that indicates the base path for the links in the timeline items (e.g., 'blogs' or 'thoughts').
+ */
+
 import PageLayout from './PageLayout.astro';
 import TimelineYearGroup from '../components/TimelineYearGroup.astro';
 import type { CollectionEntry } from 'astro:content';
@@ -7,15 +20,14 @@ import type { CollectionEntry } from 'astro:content';
 type BilingualString = string | { zh: string; en: string };
 
 interface Props {
-title: BilingualString;       // <--- 更新
-  description?: BilingualString; // <--- 更新
-  items: CollectionEntry<any>[]; // 传入原始数据
-  slugBase: string; // 'blogs' | 'thoughts'
+title: BilingualString;
+  description?: BilingualString;
+  items: CollectionEntry<any>[];
+  slugBase: string;
 }
 
 const { title, description, items, slugBase } = Astro.props;
 
-// === 数据处理：按年份分组 ===
 const postsByYear: Record<number, typeof items> = items.reduce((acc: Record<number, typeof items>, post: any) => {
   const year = post.data.pubDate.getFullYear();
   if (!acc[year]) acc[year] = [];
@@ -23,7 +35,6 @@ const postsByYear: Record<number, typeof items> = items.reduce((acc: Record<numb
   return acc;
 }, {} as Record<number, typeof items>);
 
-// 年份倒序 (2024 -> 2023)
 const sortedYears = Object.keys(postsByYear)
   .map(Number)
   .sort((a, b) => b - a);

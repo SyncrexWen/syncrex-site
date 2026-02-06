@@ -1,5 +1,19 @@
 ---
 // src/components/timeline/TimelineYearGroup.astro
+
+/**
+ * TimelineYearGroup
+ * This component renders a group of timeline items for a specific year.
+ * It receives a list of posts for that year, groups them by month, and renders them in a structured format.
+ * Each month is displayed with a header and a vertical line connecting the timeline items.
+ * Props:
+ * - year: The year for which the timeline items are being rendered.
+ * - posts: An array of collection entries (blog posts or thoughts) that belong to the specified year.
+ * - slugBase: A string that indicates the base path for the links in the timeline items (e.g., 'blogs' or 'thoughts').
+ * Usage:
+ * <TimelineYearGroup year={2024} posts={postsFor2024} slugBase="blogs" />
+ */
+
 import TimelineItem from './TimelineItem.astro';
 import type { CollectionEntry } from 'astro:content';
 
@@ -11,14 +25,12 @@ interface Props {
 
 const { year, posts, slugBase } = Astro.props;
 
-// ... (数据处理逻辑保持不变) ...
-// 简略：按月份分组逻辑
-const postsByMonth = posts.reduce((acc, post) => {
+const postsByMonth = posts.reduce<Record<number, CollectionEntry<'blogs' | 'thoughts'>[]>>((acc: any, post: any) => {
   const month = post.data.pubDate.getMonth();
   if (!acc[month]) acc[month] = [];
   acc[month].push(post);
   return acc;
-}, {} as Record<number, typeof posts>);
+}, {} as Record<number, CollectionEntry<'blogs' | 'thoughts'>[]>);
 
 const sortedMonths = Object.keys(postsByMonth).map(Number).sort((a, b) => b - a);
 ---

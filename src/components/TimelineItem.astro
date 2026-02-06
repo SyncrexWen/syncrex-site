@@ -1,9 +1,22 @@
 ---
 // src/components/timeline/TimelineItem.astro
+
+/**
+ * TimelineItem
+ * This component represents a single item in a timeline, such as a blog post or thought entry.
+ * It displays the title, publication date, and an optional description.
+ * Each item is a link that navigates to the full content of the post.
+ * Props:
+ * - post: A collection entry object containing the data for the timeline item (title, description, pubDate, slug).
+ * - slugBase: A string that indicates the base path for the link (e.g., 'blogs' or 'thoughts').
+ * Usage:
+ * <TimelineItem post={post} slugBase="blogs" />
+ */
+
 import type { CollectionEntry } from 'astro:content';
 
 interface Props {
-  post: CollectionEntry<'blog'> | CollectionEntry<'thoughts'>;
+  post: CollectionEntry<'blogs'> | CollectionEntry<'thoughts'>;
   slugBase: string;
 }
 

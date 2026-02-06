@@ -1,11 +1,22 @@
 ---
 // src/pages/index.astro
+
+/**
+ * Home Page
+ * This is the main landing page of the website.
+ */
+
 import PageLayout from '../layouts/PageLayout.astro';
 import Lang from '../components/Lang.astro';
 import QuoteBlock from '../components/QuoteBlock.astro';
 
-// 定义页面元数据
-// 技巧：由于 title/description 是字符串属性，通常建议使用 "中文 | English" 的格式
+import { Image } from 'astro:assets';
+import aCat from '../assets/images/aCat.jpeg';
+
+// define the metadata for the page, including title and description in both languages
+// { pageTitle } and { pageDesc } are passed as props to PageLayout,
+// which will use them in the <head> for SEO and display
+// and further support language toggle
 const pageTitle = {
   zh: "禅与代码",
   en: "Zen & Code"
@@ -95,4 +106,5 @@ const pageDesc = {
     给岁月以文明，而不是给文明以岁月。
   </QuoteBlock>
 
+  <Image src={aCat} alt="A Cat" width={400} height={300} />
 </PageLayout>

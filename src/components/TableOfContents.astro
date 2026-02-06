@@ -1,9 +1,21 @@
 ---
 // src/components/TableOfContents.astro
+
+/**
+ * TableOfContents
+ * This component generates a table of contents based on the headings provided in the props.
+ * It filters out H1 (depth 1) and any headings deeper than H3 (depth > 3) to maintain a clean and concise TOC.
+ * Each entry in the TOC links to the corresponding section in the page using anchor links.
+ * If there are no valid headings, it displays a message indicating that there are no contents.
+ * Props:
+ * - headings: An array of heading objects, each containing `depth`, `text`, and `slug` properties.
+ * Usage:
+ * <TableOfContents headings={headings} />
+ */
+
 const { headings } = Astro.props;
 
-// 1. 确保 headings 存在
-// 2. 过滤掉 H1 (depth 1) 和过深的标题 (depth > 3)
+// Filter out H1 (depth 1) and any headings deeper than H3 (depth > 3)
 const toc = (headings || []).filter((h: any) => h.depth > 1 && h.depth < 4);
 ---
 
@@ -28,7 +40,6 @@ const toc = (headings || []).filter((h: any) => h.depth > 1 && h.depth < 4);
 )}
 
 <style>
-  /* 简单的缩进逻辑 */
   .depth-3 {
     padding-left: 1rem;
     font-size: 0.8rem;

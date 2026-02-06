@@ -1,4 +1,16 @@
 ---
+// src/components/Footer.astro
+
+/**
+ * Footer
+ * * This component defines the footer section of the website, which includes:
+ * - A subtle divider line at the top for visual separation
+ * - Social media links with icons (RSS, GitHub, Email)
+ * - Additional links (About Site, Sitemap, License)
+ */
+
+import { AUTHOR } from "../consts";
+
 const today = new Date();
 ---
 
@@ -33,21 +45,22 @@ const today = new Date();
         <div class="copyright">
             &copy;
             <a href="/traces" class="secret-year">{today.getFullYear()}</a>
-            Kangcheng Wen. All rights reserved.
+            {AUTHOR}. All rights reserved.
         </div>
     </div>
 </footer>
 
 <style>
     footer {
-        /* 背景透明，直接透出 body 的 #2d3748 */
+        /* using a transparent background,
+        which reveal the background theme color */
         background: transparent;
         padding: 4rem 1rem 3rem 1rem;
         margin-top: auto;
         position: relative;
     }
 
-    /* 顶部微光分割线 */
+    /* a soft divider */
     .footer-divider {
         position: absolute;
         top: 0;
@@ -73,29 +86,26 @@ const today = new Date();
         gap: 1.5rem;
     }
 
-    /* 1. 社交图标：最亮，强调交互 */
     .social-links {
         display: flex;
         gap: 1.5rem;
     }
     .social-links a {
-        /* 这种颜色叫 "Slate-400"，比纯白柔和，带一点点蓝灰，完美契合背景 */
         color: #94a3b8;
         transition: all 0.3s ease;
         padding: 0.5rem;
         border-radius: 50%;
-        background: rgba(255, 255, 255, 0.03); /* 极淡的背景圆 */
+        background: rgba(255, 255, 255, 0.03);
     }
     .social-links a:hover {
-        color: #f8fafc; /* Hover 时变亮白色 */
+        color: #f8fafc;
         background: rgba(255, 255, 255, 0.1);
-        transform: translateY(-2px); /* 微微上浮 */
+        transform: translateY(-2px);
     }
 
-    /* 2. 链接文字：次级亮度 */
     .links {
         font-size: 0.875rem;
-        color: #64748b; /* Slate-500，更暗一点 */
+        color: #64748b;
         display: flex;
         align-items: center;
         gap: 0.5rem;
@@ -106,26 +116,23 @@ const today = new Date();
         transition: color 0.2s;
     }
     .links a:hover {
-        color: #cbd5e1; /* Slate-300 */
+        color: #cbd5e1;
     }
     .dot {
         opacity: 0.3;
     }
 
-    /* 3. 版权信息：最暗，作为背景噪音 */
     .copyright {
         font-size: 0.75rem;
-        color: #475569; /* Slate-600，融入背景 */
-        font-family: monospace; /* 代码体看起来更像元数据 */
+        color: #475569;
+        font-family: monospace;
     }
 
-    /* 修改你的 .secret-year 样式 */
     .secret-year {
         color: inherit;
         text-decoration: none;
-        /* 默认状态下，没有任何延迟，保证鼠标移开时效果瞬间消失 */
         transition: all 0s;
-        cursor: text; /* 默认是文本光标，伪装到底 */
+        cursor: text;
     }
 
     .secret-year:hover {
@@ -133,8 +140,6 @@ const today = new Date();
         text-shadow: 0 0 5px rgba(255,255,255,0.5);
         cursor: help;
 
-        /* 核心魔法：transition-delay */
-        /* 意思是：当你 hover 时，等 1s 再开始执行上面的变化 */
-        transition-delay: 1s;
+        transition-delay: 2s;
     }
 </style>

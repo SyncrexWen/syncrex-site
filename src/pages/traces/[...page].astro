@@ -1,24 +1,16 @@
 ---
-// 1. 引入必要的类型定义
 import type { GetStaticPaths, Page } from "astro";
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { Image } from 'astro:assets';
 
-// 2. 为 getStaticPaths 加上类型签名
 export const getStaticPaths = (async ({ paginate }) => {
-    // 获取所有吐槽
     const allTraces = await getCollection('traces');
 
-    // 按时间倒序排列
     const sortedTraces = allTraces.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
-    // 生成分页
     return paginate(sortedTraces, { pageSize: 10 });
 }) satisfies GetStaticPaths;
 
-// 3. 定义组件的 Props 类型
-// 告诉 TS：这个页面接收一个叫 'page' 的属性
-// 它的结构是 Page，里面装的是 'traces' 集合的内容
 interface Props {
     page: Page<CollectionEntry<'traces'>>;
 }
@@ -33,7 +25,6 @@ const { page } = Astro.props;
     <title>Traces | 碎片</title>
 
     <style>
-        /* 简单的 Reset */
         body { background: #1a202c; color: #e2e8f0; font-family: sans-serif; margin: 0; padding: 2rem 1rem; }
         .container { max-width: 600px; margin: 0 auto; }
         .back-link { color: #718096; text-decoration: none; margin-bottom: 2rem; display: inline-block; }
@@ -47,7 +38,7 @@ const { page } = Astro.props;
             {page.data.map((trace) => (
                 <article class="trace-item">
 
-                    {/* 1. 时间戳 */}
+                    {/* 1. Time stamp */}
                     <div class="trace-meta">
                         <time datetime={trace.data.date.toISOString()}>
                             {trace.data.date.toLocaleDateString('zh-CN', {
@@ -56,16 +47,12 @@ const { page } = Astro.props;
                         </time>
                     </div>
 
-                    {/* 2. 文字内容 */}
+                    {/* 2. Text content */}
                     <div class="trace-content">
-                        {/* 注意：trace.body 是原始 Markdown 文本。
-                            如果你想渲染成 HTML，不能直接用 {trace.body}。
-                            但为了保持极简，这里显示纯文本也是一种风格。
-                            如果需要渲染 markdown，需要用 <Content /> 组件 (比较复杂) 或 marked 库 */}
                         {trace.body}
                     </div>
 
-                    {/* 3. 图片画廊 */}
+                    {/* 3. Image gallery */}
                     {trace.data.images && trace.data.images.length > 0 && (
                         <div class="gallery-scroll">
                             {trace.data.images.map((img) => (
@@ -85,7 +72,7 @@ const { page } = Astro.props;
             ))}
         </div>
 
-        {/* 4. 加载更多按钮 */}
+        {/* 4. Load more button */}
         {page.url.next && (
             <div class="load-more-container">
                 <button

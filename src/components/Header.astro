@@ -1,4 +1,13 @@
 ---
+// src/components/Header.astro
+
+/**
+ * Header
+ * This component renders the website's header,
+ * including the site title and navigation links.
+ * It also includes a scroll listener to change the header's style when the user scrolls down.
+ */
+
 import HeaderLink from './HeaderLink.astro';
 import { SITE_TITLE } from '../consts';
 ---
@@ -10,6 +19,7 @@ import { SITE_TITLE } from '../consts';
       <HeaderLink href="/">Homepage</HeaderLink>
       <HeaderLink href="/blogs">Blogs</HeaderLink>
       <HeaderLink href="/thoughts">Thoughts</HeaderLink>
+      <HeaderLink href="/lab">Lab</HeaderLink>
       <HeaderLink href="/aboutMe">Me</HeaderLink>
       <HeaderLink href="/aboutWebsite">Site</HeaderLink>
     </div>
@@ -17,103 +27,109 @@ import { SITE_TITLE } from '../consts';
 </header>
 
 <style>
-  /* --- 1. 外层容器设置 --- */
-  .fixed-header {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    width: 100%; /* 关键：始终全宽，稳如泰山 */
-    padding-top: 1rem; /* 初始状态给顶部留一点空隙 */
-    transition: padding-top 0.4s ease; /* 让顶部空隙的消失也带动画 */
-    pointer-events: none; /* 巧妙设计：让header透明区域不挡鼠标，只有nav挡 */
-  }
+/* ============================
+  1. Outer container (sticky header)
+============================ */
 
-  /* --- 2. 内层视觉容器设置 --- */
-  nav {
-    pointer-events: auto; /* 恢复鼠标交互 */
+.fixed-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  padding-top: 1rem;
+  transition: padding-top 0.4s ease;
+  pointer-events: none;
+}
 
-    /* 初始形态：白色胶囊 */
-    background: white;
-    color: var(--black);
+/* ============================
+  2. Inner container (nav content, in default state)
+============================ */
 
-    /* 布局定位 */
-    margin: 0 auto; /* 居中 */
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 1.5em; /* 稍微加大内边距 */
-    height: 4rem;
+#nav-container {
+  pointer-events: auto;
 
-    /* 关键动画属性 */
-    max-width: 72rem; /* 对应 max-w-6xl，与你的 layout 一致 */
-    border-radius: 1.5rem 1.5rem 0 0; /* 上圆下直 */
-    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
-    /* 贝塞尔曲线：让动画更有质感 (先快后慢) */
-    transition:
-      max-width 0.5s cubic-bezier(0.25, 1, 0.5, 1),
-      background-color 0.4s ease,
-      border-radius 0.4s ease,
-      color 0.4s ease;
-  }
+  padding: 0 1.5em;
+  height: 4rem;
 
-  h2 { margin: 0; font-size: 1em; }
-  h2 a { text-decoration: none; color: inherit; transition: color 0.3s; }
+  max-width: 72rem;
+  border-radius: 1.5rem 1.5rem 0 0;
 
-  .internal-links a {
-    padding: 1em 0.5em;
-    color: inherit; /* 继承 nav 的颜色 */
-    text-decoration: none;
-    border-bottom: 3px solid transparent;
-    transition: border-color 0.3s;
-  }
-  .internal-links a.active {
-    border-bottom-color: var(--accent);
-  }
+  /* Default to dark text with a white background */
+  background-color: #ffffff;
+  color: #0f172a;
 
-  /* --- 3. 滚动后的状态 (由 JS 触发) --- */
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
 
-  /* 外层去处顶部留白 */
-  :global(.scrolled) .fixed-header {
-    padding-top: 0;
-  }
+  transition:
+    max-width 0.5s cubic-bezier(0.25, 1, 0.5, 1),
+    background-color 0.4s ease,
+    border-radius 0.4s ease,
+    color 0.4s ease;
+}
 
-  /* 内层变形 */
-/* --- 滚动后的状态：液态深色玻璃 --- */
-  :global(.scrolled) nav {
-    max-width: 100%;
-    border-radius: 0;
+h2 {
+  margin: 0;
+  font-size: 1em;
+}
 
-    /* 1. 背景色：使用 rgba 版本的 #2d3748，透明度 0.85 */
-    /* 这让背景隐约可见，但文字依然清晰 */
-    background: rgba(45, 55, 72, 0.85);
+h2 a {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.3s;
+}
 
-    /* 2. 核心魔法：背景模糊 + 饱和度提升 */
-    /* blur: 模糊背景内容，形成景深 */
-    /* saturate: 提升背后透出颜色的鲜艳度，防止模糊后颜色发灰 (Apple 的秘诀) */
-    backdrop-filter: saturate(180%) blur(16px);
-    -webkit-backdrop-filter: saturate(180%) blur(16px); /* Safari 兼容 */
+.internal-links a {
+  padding: 1em 0.5em;
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 3px solid transparent;
+  transition: border-color 0.3s;
+}
 
-    /* 3. 边框高光：在底部加一根极细的半透明白线 */
-    /* 这模拟了光线打在玻璃边缘的反光，显著增加立体感 */
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+.internal-links a.active {
+  border-bottom-color: var(--accent);
+}
 
-    color: white;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); /* 更柔和、扩散更远的阴影 */
-  }
+/* ============================
+  3. Scrolled state styles
+============================ */
 
-  /* 解决滚动时下划线颜色的微调 */
-  :global(.scrolled) .internal-links a.active {
-    border-bottom-color: white;
-  }
+/* Remove the top padding when scrolled */
+:global(body.scrolled) .fixed-header {
+  padding-top: 0;
+}
+
+/* Transformations */
+:global(body.scrolled) #nav-container {
+  max-width: 100%;
+  border-radius: 0;
+
+  background-color: var(--glass-primary-bg);
+  color: #ffffff;
+
+  backdrop-filter: saturate(180%) blur(16px);
+  -webkit-backdrop-filter: saturate(180%) blur(16px);
+
+  border-bottom: 1px solid var(--glass-border);
+
+  box-shadow: 0 4px 30px rgba(0,0,0,0.12);
+}
+
+/* active statue: white line */
+:global(body.scrolled) .internal-links a.active {
+  border-bottom-color: #ffffff;
+}
 </style>
 
 <script is:inline>
   const header = document.getElementById('main-header');
-  const nav = document.getElementById('nav-container');
 
   function handleScroll() {
-    // 滚动超过 10px 即触发，避免过于敏感
     if (window.scrollY > 10) {
       document.body.classList.add('scrolled');
     } else {
@@ -121,5 +137,6 @@ import { SITE_TITLE } from '../consts';
     }
   }
 
-  window.addEventListener('scroll', handleScroll);
+  window.addEventListener('scroll', handleScroll, { passive: true });
+  handleScroll();
 </script>

@@ -1,28 +1,30 @@
 ---
 // src/pages/blogs/[...slug].astro
+
+/**
+ * Blog Post Page
+ * This page template is used to render individual blog posts.
+ * It uses dynamic routing to match any URL under /blogs/* and renders the corresponding blog post based on the slug.
+ * The getStaticPaths function generates static pages for all blog posts at build time, ensuring fast load times and SEO benefits.
+ * The page receives the blog post data as props and renders the content using the BlogPostLayout, which includes features like a progress bar, table of contents, and update blocks.
+ * The Markdown content of the blog post is rendered using the Content component provided by Astro's content collection system.
+ */
+
 import { getCollection } from 'astro:content';
 import BlogPostLayout from '../../layouts/BlogPostLayout.astro';
 
-// 1. 核心函数：getStaticPaths
-// 因为 Astro 默认是静态构建 (SSG)，它必须在打包时知道所有可能的路径。
-// 这个函数告诉 Astro："去 content/blogs 看看，每一篇文章都给我生成一个页面"。
+// Core functions for Astro pages:
 export async function getStaticPaths() {
   const posts = await getCollection('blogs');
 
   return posts.map((post) => ({
-    // params 决定了 URL 的长相，slug 对应文件名 [...slug]
     params: { slug: post.slug },
-    // props 决定了把什么数据传给页面组件使用
     props: post,
   }));
 }
 
-// 2. 获取当前页面的数据
-// 注意：这里的 Astro.props 拿到的就是上面 props: post 传进来的完整文章对象
 const post = Astro.props;
 
-// 3. 渲染 Markdown 内容
-// Astro 会把 Markdown 正文转换成 <Content /> 组件
 const { Content, headings } = await post.render();
 ---
 
@@ -34,7 +36,6 @@ const { Content, headings } = await post.render();
     updates={post.data.updates}
 >
   <article>
-    {/* 4. 插入 Markdown 正文 */}
     <div>
         <Content />
     </div>

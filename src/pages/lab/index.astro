@@ -1,26 +1,31 @@
 ---
+// /src/pages/lab/index.astro
+
+
+
 import { getCollection } from 'astro:content';
 import CollectionLayout from '../../layouts/CollectionLayout.astro';
+import Lang from '../../components/Lang.astro';
 
-const thoughts = (await getCollection('thoughts')).sort(
+const lab = (await getCollection('lab')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 
 const pageTitle = {
-  zh: "我的想法",
-  en: "My Thoughts"
+  zh: "微研究",
+  en: "Mini Lab"
 };
 
 const pageDesc = {
-    zh: "记录我的一些想法和随笔。",
-    en: "Notes on my thoughts and essays."
-}
+  zh: "记录一些从生活出发的小研究",
+  en: "Record mini research projects inspired by life"
+};
 ---
 
 <CollectionLayout
   title={pageTitle}
   description={pageDesc}
-  items={thoughts}
-  slugBase="thoughts"
+  items={lab}
+  slugBase="lab"
 >
   </CollectionLayout>

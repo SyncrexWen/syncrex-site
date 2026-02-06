@@ -1,7 +1,7 @@
 ---
 // src/pages/thoughts/[...slug].astro
+
 import { getCollection } from 'astro:content';
-// 如果你想用专门的 Layout，可以换成 PageLayout，或者继续复用 BlogPostLayout
 import BlogPostLayout from '../../layouts/BlogPostLayout.astro';
 
 export async function getStaticPaths() {
@@ -14,10 +14,8 @@ export async function getStaticPaths() {
   }));
 }
 
-// 获取当前页面的数据
 const thought = Astro.props;
 
-// 渲染 Markdown 内容
 const { Content, headings } = await thought.render();
 ---
 

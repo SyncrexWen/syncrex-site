@@ -1,9 +1,18 @@
 ---
+// /src/pages/blogs/index.astro
+
+/**
+ * Blogs Collection Page
+ * This page lists all blog posts in the "blogs" collection, grouped by year.
+ * It uses the CollectionLayout to display the posts in a timeline format, with a title and description for the collection.
+ * The getCollection function is used to fetch all blog posts, which are then sorted by publication date before being passed to the layout.
+ * The page also supports bilingual content for the title and description, allowing for both Chinese and English versions to be displayed based on the user's language preference.
+ */
+
 import { getCollection } from 'astro:content';
 import CollectionLayout from '../../layouts/CollectionLayout.astro';
 import Lang from '../../components/Lang.astro';
 
-// 1. 获取数据 (注意：这里按日期排序很重要)
 const posts = (await getCollection('blogs')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );

@@ -1,0 +1,112 @@
+---
+// src/layouts/LabLayout.astro
+
+/**
+ * LabLayout
+ * This layout is designed for individual lab notes.
+ */
+
+import DefaultLayout from './DefaultLayout.astro';
+import BackButton from '../components/BackButton.astro';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+    post: CollectionEntry<'lab'>;
+}
+
+const { post } = Astro.props;
+const { title, description, pubDate, version } = post.data;
+---
+
+<DefaultLayout title={title} description={description}>
+
+  <div id="progress-container" class="fixed top-0 left-0 w-full h-1 z-[101] bg-transparent pointer-events-none">
+    <div id="progress-bar" class="h-full bg-primary w-0 transition-all duration-150 ease-out"></div>
+  </div>
+
+    <div class="mb-6">
+        <BackButton href="/lab" text="Back to Lab" theme="light" />
+    </div>
+
+  <article class="max-w-3xl mx-auto px-4 py-12">
+
+    <header class="text-center mb-12 border-b border-gray-200 pb-8">
+      <div class="font-mono text-xs text-main/50 uppercase tracking-widest mb-4">
+        Lab Note · v{version} · {pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}
+      </div>
+
+      <h1 class="text-3xl md:text-4xl font-serif font-bold text-main mb-6 leading-tight">
+        {title}
+      </h1>
+
+      <div class="bg-surface p-6 rounded-lg text-left border border-black/5 mx-auto max-w-2xl">
+        <span class="block font-bold text-xs text-main/70 uppercase mb-2">Abstract</span>
+        <p class="text-main/80 font-serif italic text-lg leading-relaxed">
+          {description}
+        </p>
+      </div>
+    </header>
+
+    <div class="
+      prose prose-lg prose-slate mx-auto
+      font-serif
+      prose-headings:font-sans prose-headings:font-bold
+      prose-p:text-justify prose-p:leading-8
+      prose-blockquote:not-italic prose-blockquote:border-l-2 prose-blockquote:bg-gray-50 prose-blockquote:py-2
+      prose-p:overflow-visible
+    ">
+      <slot />
+    </div>
+
+    <div class="mt-16 pt-8 border-t border-dashed border-gray-300 text-sm text-main/50 font-mono">
+      <p>Citation: {title}. My Personal Lab. {pubDate.getFullYear()}.</p>
+    </div>
+
+  </article>
+</DefaultLayout>
+
+<style>
+  :global(.prose .footnotes) {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e2e8f0;
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+  }
+
+  :global(.prose .footnotes ol) {
+    padding-left: 1rem;
+  }
+
+  :global(.katex-display) {
+    margin: 2em 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+</style>
+
+<script>
+  const progressBar = document.getElementById('progress-bar');
+
+  let isTicking = false;
+
+  function onScroll() {
+    const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+    const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+
+    const scrolled = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+
+    if (!isTicking) {
+      window.requestAnimationFrame(() => {
+        if (progressBar) {
+          progressBar.style.width = scrolled + "%";
+        }
+
+        isTicking = false;
+      });
+
+      isTicking = true;
+    }
+  }
+    window.addEventListener('scroll', onScroll, { passive: true });
+</script>

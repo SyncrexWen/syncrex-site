@@ -1,5 +1,13 @@
 ---
-// src/components/QuoteBlock.astro
+// src/components/FancyQuoteBlock.astro
+/**
+ * FancyQuoteBlock
+ * This component is designed to display a quote in a visually appealing way,
+ * with support for both Chinese and English text.
+ * It includes decorative elements like background patterns and hover effects
+ * to enhance the user experience.
+ */
+
 import Lang from './Lang.astro';
 
 interface Props {
@@ -13,9 +21,9 @@ interface Props {
 const {
   zh,
   en,
-  citeZh = "设计理念",
-  citeEn = "Philosophy",
-  bgClass = "bg-[#2d3748]"
+  citeZh,
+  citeEn,
+  bgClass = "bg-primary"
 } = Astro.props;
 
 if (!zh && !en) return null;
@@ -71,7 +79,6 @@ if (!zh && !en) return null;
 </div>
 
 <style>
-  /* 保持入场动画 */
   .quote-container {
     animation: fadeIn 0.6s ease-out;
   }

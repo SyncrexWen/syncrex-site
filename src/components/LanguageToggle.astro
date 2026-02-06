@@ -1,5 +1,18 @@
 ---
 // src/components/LanguageToggle.astro
+
+/**
+ * LanguageToggle
+ * This component renders a language switcher button that allows users
+ * to toggle between Chinese and English.
+ * It also supports a "locked" state where one language is fixed and the other is unavailable,
+ * showing a tooltip on hover to explain why.
+ * The component relies on the `data-lang` attribute set on the root element (html)
+ * to determine which language is currently active and applies styles accordingly.
+ * Hovering over the button will temporarily enhance the visibility of both language options,
+ * while the active language remains highlighted.
+ */
+
 interface Props {
   lockedLang?: 'zh' | 'en';
 }
@@ -32,7 +45,6 @@ const tooltipText = lockedLang === 'zh'
 </button>
 
 <style>
-  /* === 1. 容器设计 (保持不变) === */
   .focus-switch {
     position: relative;
     display: flex;
@@ -40,26 +52,24 @@ const tooltipText = lockedLang === 'zh'
     gap: 0.5rem;
     padding: 0.5rem 1rem;
     border-radius: 99px;
-    border: 1px solid rgba(45, 55, 72, 0.1);
-    background: rgba(255, 255, 255, 0.5);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--glass-border-primary);
+  background-color: var(--glass-light-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     overflow: visible;
   }
 
   .focus-switch:not(.is-locked) { cursor: pointer; }
-  .focus-switch:not(.is-locked):hover {
-    background: rgba(255, 255, 255, 0.8);
-    border-color: rgba(45, 55, 72, 0.2);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  }
+.focus-switch:not(.is-locked):hover {
+  background-color: var(--glass-light-bg-hover);
+  border-color: var(--glass-border-primary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
   .focus-switch.is-locked {
     cursor: not-allowed;
     opacity: 0.8;
   }
-
-  /* === 2. 字体与状态样式 === */
   .lang-item {
     font-size: 0.875rem;
     font-weight: 600;
@@ -77,17 +87,9 @@ const tooltipText = lockedLang === 'zh'
     transform: translateY(-1px);
   }
 
-  /* === 3. 状态逻辑 (核心修复) === */
-
-  /* 关键修改 A: 将 body 改为 :root (即 html)。
-     因为 BaseHead 中的阻塞脚本是给 html 加属性的，这样 CSS 能够立刻匹配，无需等待。
-  */
-
-  /* ---> 默认状态 或 中文激活 <--- */
-  /* :not([data-lang]) 确保了即使脚本完全没跑，也默认显示为中文选中状态，防止白屏闪烁 */
   :global(:root:not([data-lang])) .zh,
   :global(:root[data-lang="zh"]) .zh {
-    color: #2d3748;
+    color: rgb(var(--theme-color-primary));
     opacity: 1;
     filter: blur(0);
     transform: scale(1.05);
@@ -99,10 +101,8 @@ const tooltipText = lockedLang === 'zh'
     filter: blur(1.5px);
     font-weight: 500;
   }
-
-  /* ---> 英文激活 <--- */
   :global(:root[data-lang="en"]) .en {
-    color: #2d3748;
+    color: rgb(var(--theme-color-primary));
     opacity: 1;
     filter: blur(0);
     transform: scale(1.05);
@@ -113,10 +113,6 @@ const tooltipText = lockedLang === 'zh'
     filter: blur(1.5px);
     font-weight: 500;
   }
-
-  /* === 4. Hover 交互逻辑 (同步修改为 :root) === */
-
-  /* A. 正常模式 */
   .focus-switch:not(.is-locked):hover .lang-item {
     filter: blur(0) !important;
     opacity: 0.8;
@@ -125,8 +121,6 @@ const tooltipText = lockedLang === 'zh'
   :global(:root[data-lang="zh"]) .focus-switch:not(.is-locked):hover .zh { opacity: 1; }
   :global(:root[data-lang="en"]) .focus-switch:not(.is-locked):hover .en { opacity: 1; }
 
-
-  /* B. 锁定模式 */
   :global(:root[data-lang="zh"]) .focus-switch.is-locked:hover .en {
     filter: blur(2px) !important;
     opacity: 0.3 !important;
@@ -136,13 +130,12 @@ const tooltipText = lockedLang === 'zh'
     opacity: 0.3 !important;
   }
 
-  /* === 5. Tooltip (保持不变) === */
   .tooltip-popup {
     position: absolute;
     top: 120%;
     left: 50%;
     transform: translateX(-50%) translateY(-10px);
-    background-color: #2d3748;
+    background-color: rgb(var(--theme-color-primary));
     color: #fff;
     font-size: 0.75rem;
     padding: 0.4rem 0.8rem;
@@ -163,7 +156,7 @@ const tooltipText = lockedLang === 'zh'
     margin-left: -5px;
     border-width: 5px;
     border-style: solid;
-    border-color: transparent transparent #2d3748 transparent;
+    border-color: transparent transparent rgb(var(--theme-color-primary)) transparent;
   }
   .focus-switch.is-locked:hover .tooltip-popup {
     opacity: 1;
@@ -185,8 +178,6 @@ const tooltipText = lockedLang === 'zh'
         currentLang.set(lockedLang);
       }
     } else {
-      // 此处逻辑保持不变，因为我们主要依赖 BaseHead 里的初始化
-      // 但为了后续交互一致性，保持监听即可
       currentLang.subscribe(lang => {
         document.documentElement.setAttribute('data-lang', lang);
       });

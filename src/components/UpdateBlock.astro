@@ -1,4 +1,24 @@
 ---
+// src/components/UpdateBlock.astro
+
+/**
+ * UpdateBlock
+ * This component is designed to display the latest update or correction for a page.
+ * It accepts an array of updates, each with a date, content, and optional type (correction, update, note).
+ * The most recent update is prominently displayed, while previous updates can be viewed in a collapsible section if there are multiple entries.
+ * This allows readers to quickly see the latest changes while still having access to the full update history if they are interested.
+ * Props:
+ * - updates: An array of update objects, each containing:
+ *   - date: The date of the update (Date object).
+ *   - content: A string describing the update.
+ *   - type: An optional string indicating the type of update (e.g., 'correction', 'update', 'note').
+ * Usage:
+ * <UpdateBlock updates={[
+ *   { date: new Date('2024-06-01'), content: 'Fixed a typo in the introduction.', type: 'correction' },
+ *   { date: new Date('2024-05-20'), content: 'Added a new section on best practices.', type: 'update' },
+ * ]} />
+ */
+
 interface UpdateItem {
   date: Date;
   content: string;

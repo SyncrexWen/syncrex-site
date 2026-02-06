@@ -1,5 +1,16 @@
 ---
 // src/components/Lang.astro
+
+/**
+ * Lang
+ * This component is responsible for rendering content based on the current language setting.
+ * It uses the `data-lang` attribute on the root element to determine which language to display.
+ * Bilingual content can be wrapped in this component,
+ * and it will show or hide based on the language toggle. Eg:
+ * <Lang is="zh">这是中文内容</Lang>
+ * <Lang is="en">This is English content</Lang>
+ */
+
 interface Props {
   is: 'zh' | 'en';
 }
@@ -10,9 +21,7 @@ const { is } = Astro.props;
 </div>
 
 <style>
-  /* 只有当我们需要特定的行内布局时才写样式，否则留空 */
   .lang-content {
-      /* 确保它是块级或行内块，视情况而定 */
-      display: contents; /* 推荐：这样 div 本身不参与布局，只渲染里面的文字 */
+      display: contents;
   }
 </style>

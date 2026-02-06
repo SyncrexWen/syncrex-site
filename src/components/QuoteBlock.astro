@@ -1,12 +1,24 @@
 ---
+// src/components/QuoteBlock.astro
+
+/**
+ * QuoteBlock
+ * This component renders a minimalisticly-stylized blockquote
+ * with decorative quotation marks and an optional citation.
+ * It is designed to enhance the visual appeal of quoted text, making it stand out on the page.
+ * Props:
+ * - cite: The source or author of the quote, displayed in the footer of the blockquote.
+ * Usage:
+ * <QuoteBlock cite="Author Name">
+ *   This is the quoted text.
+ * </QuoteBlock>
+ */
 interface Props {
   cite: string;
 }
 
 const { cite } = Astro.props;
 
-// 主题色
-const themeColor = '#2d3748';
 ---
 
 <blockquote class="quote-container">
@@ -24,7 +36,7 @@ const themeColor = '#2d3748';
   <span class="quote-icon quote-right" aria-hidden="true">”</span>
 </blockquote>
 
-<style define:vars={{ themeColor }}>
+<style>
   .quote-container {
     position: relative;
     background-color: #ffffff;
@@ -46,7 +58,7 @@ const themeColor = '#2d3748';
     font-family: Georgia, "Times New Roman", Serif;
     font-size: 5rem; /* 稍微调小一点，显得更精致 */
     line-height: 1;
-    color: var(--themeColor);
+    color: var(--c-main);
     opacity: 0.15; /* 淡化处理作为背景 */
     pointer-events: none;
     user-select: none;
@@ -79,7 +91,7 @@ const themeColor = '#2d3748';
     text-align: right;
     font-size: 1.1rem; /* 【修改点】字号与正文一致 */
     font-weight: 600; /* 加粗以示区分 */
-    color: var(--themeColor);
+    color: var(--c-main);
     opacity: 1; /* 提高不透明度，使其更清晰 */
   }
 

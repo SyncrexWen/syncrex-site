@@ -1,22 +1,36 @@
 ---
 // src/layouts/PageLayout.astro
+
+/**
+ * PageLayout
+ * * The specialized layout for generic content pages.
+ * Features:
+ * - Bilingual title/description support
+ * - Reading progress bar
+ * - Centered typography-optimized content area
+ */
+
 import DefaultLayout from './DefaultLayout.astro';
 import LanguageToggle from '../components/LanguageToggle.astro';
 
 type BilingualString = string | { zh: string; en: string };
 
 interface Props {
+  /** Page title. Pass an object {zh, en} for bilingual support. */
   title: BilingualString;
+  /** Page description. Optional. */
   description?: BilingualString;
+  /** Force the language toggle to a specific state. */
   lockedLang?: 'zh' | 'en';
 }
 
 const { title, description, lockedLang } = Astro.props;
 
-// 辅助函数：生成的类名必须与 BaseHead 中的 CSS 严格对应
+// === Logic: Bilingual Rendering ===
+// Helper to generate hidden-when-xx spans based on global.css rules.
+// CRITICAL: Class names must match BaseHead.astro styles.
 const renderBilingual = (content: BilingualString) => {
   if (typeof content === 'string') return content;
-  // 注意这里：类名对应 BaseHead 里的 .hidden-when-en / .hidden-when-zh
   return `
     <span class="hidden-when-en">${content.zh}</span>
     <span class="hidden-when-zh">${content.en}</span>
@@ -26,15 +40,16 @@ const renderBilingual = (content: BilingualString) => {
 const titleHtml = renderBilingual(title);
 const descHtml = description ? renderBilingual(description) : null;
 
-// SEO Title 处理
-const metaTitle = typeof title === 'string' ? title : title.zh; // 建议默认给中文，或者你之前的拼接逻辑
+// === Logic: SEO Fallback ===
+// Use Chinese as the default meta title/desc for crawlers
+const metaTitle = typeof title === 'string' ? title : title.zh;
 const metaDesc = typeof description === 'string' ? description : description?.zh;
 ---
 
 <DefaultLayout title={metaTitle} description={metaDesc}>
 
   <div id="progress-container" class="fixed top-0 left-0 w-full h-1 z-[101] bg-transparent pointer-events-none">
-    <div id="progress-bar" class="h-full bg-[#2d3748] w-0 transition-all duration-100 ease-out"></div>
+    <div id="progress-bar" class="h-full bg-primary w-0 transition-all duration-100 ease-out"></div>
   </div>
 
   <article class="w-full max-w-4xl mx-auto flex flex-col items-center relative z-10">
@@ -44,24 +59,23 @@ const metaDesc = typeof description === 'string' ? description : description?.zh
     </div>
 
     <h1
-      class="text-4xl md:text-5xl lg:text-6xl font-black text-center text-slate-900 leading-[1.1] mb-6 max-w-3xl"
+      class="text-4xl md:text-5xl lg:text-6xl font-black text-center text-main leading-[1.1] mb-6 max-w-3xl"
       set:html={titleHtml}
     />
 
     {descHtml && (
       <p
-        class="text-xl md:text-2xl text-slate-500 text-center font-serif italic max-w-2xl leading-relaxed opacity-90"
+        class="text-xl md:text-2xl text-main/60 text-center font-serif italic max-w-2xl leading-relaxed opacity-90"
         set:html={descHtml}
       />
     )}
 
-    <hr class="w-24 border-t-4 border-slate-200 rounded-full my-12" />
+    <hr class="w-24 border-t-4 border-primary/20 rounded-full my-12" />
 
     <div class="
       w-full max-w-3xl mx-auto
-      prose prose-lg prose-slate
-      /* ...其他样式保持不变... */
-      prose-headings:font-bold prose-headings:text-slate-800
+      prose prose-lg
+      prose-headings:font-bold prose-headings:text-main
       prose-p:text-justify prose-p:leading-loose
     ">
       <slot />
@@ -76,4 +90,3 @@ const metaDesc = typeof description === 'string' ? description : description?.zh
 
   </article>
 </DefaultLayout>
-

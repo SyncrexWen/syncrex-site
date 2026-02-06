@@ -1,3 +1,4 @@
+// tailwind.config.mjs
 import typography from '@tailwindcss/typography';
 
 /** @type {import('tailwindcss').Config} */
@@ -5,71 +6,77 @@ export default {
   content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
   theme: {
     extend: {
-      // tailwind.config.mjs
       fontFamily: {
-        // 标题 - 典雅衬线
+        // Font for the title/heading
         serif: ['Cormorant Garamond', 'Noto Serif SC', 'serif'],
-
-        // 正文/描述 - 现代极简
+        // Font for the body text
         sans: ['Inter', 'Noto Sans SC', 'sans-serif'],
-
-        // 代码 - 保持不变
+        // Font for code blocks and inline code
         mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
       },
-      // 定义一组自定义颜色，方便统一管理（可选）
+      // Define colors using CSS variables for better theming support
       colors: {
-        // 你原本的深色背景，这里显式命名，方便引用
-        brand: {
-          dark: '#2d3748',
-          primary: '#3182ce', // 你原来的蓝，或者改为 '#4f46e5' (Indigo) 更优雅
-        }
+        // Tailwind color class that references the CSS variable with alpha support
+        primary: 'rgb(var(--theme-color-primary))',
+        // Semantic colors that directly use the CSS variables
+        main: 'var(--c-main)',
+        bg: 'var(--c-bg)',
+        muted: 'var(--c-muted)',
       },
       typography: (theme) => ({
         DEFAULT: {
           css: {
+            // Optimize the base styles for better readability and aesthetics
             maxWidth: '100%',
             fontFamily: theme('fontFamily.serif'),
 
-            // === 1. 全局色调优化 ===
-            // 使用 slate-700 代替 gray-700。Slate 带有微蓝倾向，
-            // 完美呼应你的 #2d3748 背景，比纯中性灰更有质感。
+            // === Global color optimize ===
+            // Use slate-700 as the default text color
+            // for better readability and a more modern look,
+            // instead of the default slate-800 which can be a bit too dark on light backgrounds.
             color: theme('colors.slate.700'),
 
-            // === 2. 段落优化 ===
+            // === Optimize paragraph element ===
             p: {
-              marginTop: '1.5em', // 稍微再加大一点段间距，增强呼吸感
+              // Using a larger line height and more generous vertical spacing
+              // significantly enhance readability, especially for longer texts.
+              // The default Tailwind typography plugin uses a line height of around 1.75, which is good,
+              // but we can push it slightly higher to 1.8 for an even more comfortable reading experience.
+              // Additionally, increasing the margin above and below paragraphs to 1.5em
+              // creates a clearer separation between blocks of text,
+              // making it easier for readers to follow along without feeling visually cramped.
+              marginTop: '1.5em',
               marginBottom: '1.5em',
-              lineHeight: '1.8', // 1.8 也是中文衬线体阅读的黄金行高
+              lineHeight: '1.8',
             },
 
-            // === 3. 标题优化 ===
+            // === Optimize the heading elements ===
             'h1, h2, h3, h4, h5, h6': {
               fontFamily: theme('fontFamily.sans'),
-              color: theme('colors.slate.900'), // 更深邃的黑
+              color: theme('colors.slate.900'),
               fontWeight: '700',
               letterSpacing: '-0.025em',
             },
             h2: {
-              marginTop: '2.5em', // 增加层级区分
+              marginTop: '2.5em',
               marginBottom: '1em',
               paddingBottom: '0.3em',
               borderBottom: '1px solid',
-              borderColor: theme('colors.slate.200'), // 更轻盈的分割线
+              borderColor: theme('colors.slate.200'),
             },
             h3: {
               marginTop: '2em',
               marginBottom: '0.75em',
             },
 
-            // === 4. 引用块 (Blockquote) 优化 - 杂志风格 ===
+            // === Optimize the quote block element ===
             blockquote: {
               fontWeight: '400',
               fontStyle: 'normal',
               color: theme('colors.slate.600'),
               borderLeftWidth: '4px',
-              // 使用你的品牌色作为边框，或者用 Indigo-500 提亮
               borderLeftColor: theme('colors.indigo.500'),
-              backgroundColor: theme('colors.slate.50'), // 极淡的岩灰背景
+              backgroundColor: theme('colors.slate.50'),
               padding: '0.75rem 1.25rem',
               borderRadius: '0.375rem',
               marginTop: '1.5em',
@@ -79,68 +86,66 @@ export default {
             'blockquote p:first-of-type::before': { content: 'none' },
             'blockquote p:last-of-type::after': { content: 'none' },
 
-            // === 5. 行内代码 (Inline Code) 优化 - 优雅风格 ===
-            // 之前的粉色+灰背景对比度太高。
-            // 方案A：复古红（Notion风）
-            // 方案B：深紫色（极客风）
-            // 这里采用方案A，更适合阅读。
+            // === Optimize inline code element ===
             code: {
-              color: theme('colors.rose.700'), // 优雅的深玫瑰红
-              backgroundColor: theme('colors.rose.50'), // 极淡的红底，与文字呼应
-              // 或者是单色风格：
+              // Use two color schemes for inline code:
+              // a vibrant theme
+              color: theme('colors.rose.700'),
+              backgroundColor: theme('colors.rose.50'),
+              // monochrome
               // color: theme('colors.slate.700'),
               // backgroundColor: theme('colors.slate.100'),
 
               padding: '0.2em 0.4em',
               borderRadius: '0.25rem',
-              fontWeight: '600', // 稍微加粗一点点
+              fontWeight: '600',
               fontSize: '0.875em',
               fontFamily: theme('fontFamily.mono'),
-              border: '1px solid rgba(0,0,0,0.05)', // 微弱的边框增加精致感
+              border: '1px solid rgba(0,0,0,0.05)',
             },
             'code::before': { content: 'none' },
             'code::after': { content: 'none' },
 
-            // === 6. 代码块 (Pre) 优化 ===
+            // === Optimize the pre element ===
             pre: {
-              backgroundColor: '#2d3748', // 你的核心色
-              color: '#e2e8f0', // Slate-200，比纯白更柔和，保护视力
+              backgroundColor: '#2d3748',
+              color: '#e2e8f0',
               borderRadius: '0.5rem',
               marginTop: '1.5em',
               marginBottom: '1.5em',
-              boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)', // 增加立体感
-              border: '1px solid rgba(255,255,255,0.05)', // 在深色背景上增加微妙的高光边框
+              boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+              border: '1px solid rgba(255,255,255,0.05)',
             },
-            // 确保代码块内的代码字体正确
+            // Config the font styles of pre element
             'pre code': {
               backgroundColor: 'transparent',
               color: 'inherit',
               fontSize: '0.9em',
               fontWeight: '400',
-              border: 'none', // 去除行内代码的边框样式
+              border: 'none',
               padding: '0',
             },
 
-            // === 7. 列表优化 ===
+            // === Optimize list element ===
             'ul > li': {
               paddingLeft: '0.375em',
             },
             'ul > li::marker': {
-              color: theme('colors.indigo.400'), // 用淡靛青色做圆点，比灰色更灵动
+              color: theme('colors.indigo.400'),
             },
             li: {
               marginTop: '0.5em',
               marginBottom: '0.5em',
             },
 
-            // === 8. 链接优化 ===
+            // === Optimize the link element ===
             a: {
-              color: theme('colors.indigo.600'), // Indigo 比纯蓝更具高级感
+              color: theme('colors.indigo.600'),
               textDecoration: 'none',
               fontWeight: '500',
               transition: 'all 0.2s',
               borderBottom: '1px solid transparent',
-              // 加上这个，让链接在 hover 时有一个很浅的背景，类似 Medium
+              // adding a block when hovering
               '&:hover': {
                 color: theme('colors.indigo.800'),
                 backgroundColor: theme('colors.indigo.50'),
@@ -148,15 +153,15 @@ export default {
               },
             },
 
-            // === 9. 图片优化 ===
+            // === Optimize the image element ===
             img: {
-              borderRadius: '0.75rem', // 更圆润一点
+              borderRadius: '0.75rem',
               boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)', // 更高级的阴影
               marginTop: '2.5em',
               marginBottom: '2.5em',
             },
 
-            // === 10. 分割线优化 ===
+            // === Optimize the hr element ===
             hr: {
               borderColor: theme('colors.slate.200'),
               marginTop: '3em',
