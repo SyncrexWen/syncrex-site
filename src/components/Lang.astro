@@ -12,16 +12,17 @@
  */
 
 interface Props {
-  is: 'zh' | 'en';
+    is: 'zh' | 'en';
 }
 const { is } = Astro.props;
 ---
+
 <div class={`lang-content lang-${is}`}>
     <slot />
 </div>
 
 <style>
-  .lang-content {
-      display: contents;
-  }
+    .lang-content {
+        display: contents;
+    }
 </style>

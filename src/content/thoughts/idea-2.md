@@ -1,16 +1,16 @@
 ---
-title: "春天的第一次散步"
-description: "记录今年春天第一次郊外散步的所见所感"
+title: '春天的第一次散步'
+description: '记录今年春天第一次郊外散步的所见所感'
 pubDate: 2024-04-05T16:00:00
 updatedDate: 2024-04-06T10:00:00
 isDraft: false
 updates:
-  - date: 2024-04-05T22:30:00
-    content: "添加了关于野花的描述"
-    type: update
-  - date: 2024-04-06T10:00:00
-    content: "修正了几处错别字"
-    type: correction
+    - date: 2024-04-05T22:30:00
+      content: '添加了关于野花的描述'
+      type: update
+    - date: 2024-04-06T10:00:00
+      content: '修正了几处错别字'
+      type: correction
 ---
 
 ## 久违的户外

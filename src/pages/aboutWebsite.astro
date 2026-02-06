@@ -8,19 +8,22 @@
  * The page supports bilingual content for the title and description, allowing for both Chinese and English versions to be displayed based on the user's language preference.
  */
 
-import PageLayout from "../layouts/PageLayout.astro"
+import PageLayout from '../layouts/PageLayout.astro';
 
 const pageTitle = {
-    zh: "关于本站",
-    en: "About This Website"
-}
+    zh: '关于本站',
+    en: 'About This Website',
+};
 const pageDesc = {
-    zh: "关于本站的一些信息。",
-    en: "Information about this website."
-}
+    zh: '关于本站的一些信息。',
+    en: 'Information about this website.',
+};
 ---
 
 <PageLayout title={pageTitle} description={pageDesc}>
     <h1>About This Website</h1>
-    <p>This is a placeholder page for information about this website. Content will be added here in the future.</p>
+    <p>
+        This is a placeholder page for information about this website. Content will be added here in
+        the future.
+    </p>
 </PageLayout>

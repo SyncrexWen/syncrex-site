@@ -15,17 +15,16 @@ import rehypeKatex from 'rehype-katex';
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://www.example.com",
-  vite: {
-    plugins: []
-  },
+    site: 'https://www.example.com',
+    vite: {
+        plugins: [],
+    },
 
-  integrations: [mdx(), sitemap(), tailwind()],
+    integrations: [mdx(), sitemap(), tailwind()],
 
-  markdown: {
-    remarkPlugins: [remarkMath],
-    rehypePlugins: [rehypeKatex],
-    gfm: true,
-  },
+    markdown: {
+        remarkPlugins: [remarkMath],
+        rehypePlugins: [rehypeKatex],
+        gfm: true,
+    },
 });
-

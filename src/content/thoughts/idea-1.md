@@ -1,12 +1,12 @@
 ---
-title: "雨夜的咖啡馆"
-description: "在一个下雨的夜晚，我在街角的咖啡馆写下的一些随想"
+title: '雨夜的咖啡馆'
+description: '在一个下雨的夜晚，我在街角的咖啡馆写下的一些随想'
 pubDate: 2024-03-10T21:15:00
 isDraft: false
 updates:
-  - date: 2024-03-11T08:30:00
-    content: "补充了最后一段内容"
-    type: update
+    - date: 2024-03-11T08:30:00
+      content: '补充了最后一段内容'
+      type: update
 ---
 
 窗外的雨声淅淅沥沥，咖啡馆里弥漫着咖啡豆的香气和轻柔的爵士乐。这样的夜晚总是让人陷入沉思。

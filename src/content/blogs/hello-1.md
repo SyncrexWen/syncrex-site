@@ -1,16 +1,16 @@
 ---
-title: "深入理解JavaScript闭包"
-description: "闭包是JavaScript中一个核心概念，本文将深入探讨其工作原理和实际应用场景"
+title: '深入理解JavaScript闭包'
+description: '闭包是JavaScript中一个核心概念，本文将深入探讨其工作原理和实际应用场景'
 pubDate: 2024-03-15
 updatedDate: 2024-03-20
 isDraft: false
 updates:
-  - date: 2024-03-18
-    content: "添加了更多实际使用示例"
-    type: update
-  - date: 2024-03-20
-    content: "修复了关于内存泄漏部分的描述"
-    type: correction
+    - date: 2024-03-18
+      content: '添加了更多实际使用示例'
+      type: update
+    - date: 2024-03-20
+      content: '修复了关于内存泄漏部分的描述'
+      type: correction
 ---
 
 ## 什么是闭包？

@@ -14,24 +14,18 @@ import CollectionLayout from '../../layouts/CollectionLayout.astro';
 import Lang from '../../components/Lang.astro';
 
 const posts = (await getCollection('blogs')).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 
 const pageTitle = {
-  zh: "我的博客",
-  en: "My Blogs"
+    zh: '我的博客',
+    en: 'My Blogs',
 };
 
 const pageDesc = {
-  zh: "记录技术与生活的点滴。",
-  en: "Notes on technology and life."
+    zh: '记录技术与生活的点滴。',
+    en: 'Notes on technology and life.',
 };
 ---
 
-<CollectionLayout
-  title={pageTitle}
-  description={pageDesc}
-  items={posts}
-  slugBase="blogs"
->
-  </CollectionLayout>
+<CollectionLayout title={pageTitle} description={pageDesc} items={posts} slugBase="blogs" />

@@ -1,6 +1,6 @@
 ---
-title: "读《瓦尔登湖》有感"
-description: "在忙碌生活中重读梭罗的经典作品，一些新的感悟"
+title: '读《瓦尔登湖》有感'
+description: '在忙碌生活中重读梭罗的经典作品，一些新的感悟'
 pubDate: 2022-11-28T20:45:00
 isDraft: false
 ---

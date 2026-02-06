@@ -5,13 +5,12 @@ import { getCollection } from 'astro:content';
 import LabLayout from '../../layouts/LabLayout.astro';
 
 export async function getStaticPaths() {
-  const lab = await getCollection('lab');
+    const lab = await getCollection('lab');
 
-  return lab.map((entry) => ({
-
-    params: { slug: entry.slug },
-    props: entry,
-  }));
+    return lab.map((entry) => ({
+        params: { slug: entry.slug },
+        props: entry,
+    }));
 }
 
 const entry = Astro.props;
@@ -19,8 +18,6 @@ const entry = Astro.props;
 const { Content, headings } = await entry.render();
 ---
 
-<LabLayout
-    post={entry}
->
+<LabLayout post={entry}>
     <Content />
 </LabLayout>

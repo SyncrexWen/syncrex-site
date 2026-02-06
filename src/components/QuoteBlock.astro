@@ -14,88 +14,87 @@
  * </QuoteBlock>
  */
 interface Props {
-  cite: string;
+    cite: string;
 }
 
 const { cite } = Astro.props;
-
 ---
 
 <blockquote class="quote-container">
-  <span class="quote-icon quote-left" aria-hidden="true">“</span>
+    <span class="quote-icon quote-left" aria-hidden="true">“</span>
 
-  <div class="quote-wrapper">
-    <div class="quote-content">
-        <slot />
-        <footer class="quote-author">
-            <cite>{cite}</cite>
-        </footer>
+    <div class="quote-wrapper">
+        <div class="quote-content">
+            <slot />
+            <footer class="quote-author">
+                <cite>{cite}</cite>
+            </footer>
+        </div>
     </div>
-  </div>
 
-  <span class="quote-icon quote-right" aria-hidden="true">”</span>
+    <span class="quote-icon quote-right" aria-hidden="true">”</span>
 </blockquote>
 
 <style>
-  .quote-container {
-    position: relative;
-    background-color: #ffffff;
-    margin: 2rem 0;
-    /* 上下左右留出足够的内边距，保持呼吸感 */
-    padding: 2.5rem 3rem;
-    color: #4a5568;
-    border-left: none;
-  }
+    .quote-container {
+        position: relative;
+        background-color: #ffffff;
+        margin: 2rem 0;
+        /* 上下左右留出足够的内边距，保持呼吸感 */
+        padding: 2.5rem 3rem;
+        color: #4a5568;
+        border-left: none;
+    }
 
-  .quote-wrapper {
-    position: relative;
-    z-index: 1; /* 确保文字在装饰图标之上 */
-  }
+    .quote-wrapper {
+        position: relative;
+        z-index: 1; /* 确保文字在装饰图标之上 */
+    }
 
-  /* 引号通用样式 */
-  .quote-icon {
-    position: absolute;
-    font-family: Georgia, "Times New Roman", Serif;
-    font-size: 5rem; /* 稍微调小一点，显得更精致 */
-    line-height: 1;
-    color: var(--c-main);
-    opacity: 0.15; /* 淡化处理作为背景 */
-    pointer-events: none;
-    user-select: none;
-  }
+    /* 引号通用样式 */
+    .quote-icon {
+        position: absolute;
+        font-family: Georgia, 'Times New Roman', Serif;
+        font-size: 5rem; /* 稍微调小一点，显得更精致 */
+        line-height: 1;
+        color: var(--c-main);
+        opacity: 0.15; /* 淡化处理作为背景 */
+        pointer-events: none;
+        user-select: none;
+    }
 
-  /* 左引号位置 */
-  .quote-left {
-    top: 0;
-    left: 10px;
-  }
+    /* 左引号位置 */
+    .quote-left {
+        top: 0;
+        left: 10px;
+    }
 
-  /* 右引号位置 */
-  .quote-right {
-    bottom: -10px; /* 沉底一点 */
-    right: 20px;
-  }
+    /* 右引号位置 */
+    .quote-right {
+        bottom: -10px; /* 沉底一点 */
+        right: 20px;
+    }
 
-  /* 正文样式 */
-  .quote-content {
-    font-size: 1.1rem;
-    line-height: 1.8;
-    font-style: italic;
-    text-align: justify; /* 建议两端对齐，纯文字块会更好看 */
-  }
+    /* 正文样式 */
+    .quote-content {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        font-style: italic;
+        text-align: justify; /* 建议两端对齐，纯文字块会更好看 */
+    }
 
-  /* 作者样式 */
-  .quote-author {
-    margin-top: 1.2rem;
-    margin-right: 1.4rem;
-    text-align: right;
-    font-size: 1.1rem; /* 【修改点】字号与正文一致 */
-    font-weight: 600; /* 加粗以示区分 */
-    color: var(--c-main);
-    opacity: 1; /* 提高不透明度，使其更清晰 */
-  }
+    /* 作者样式 */
+    .quote-author {
+        margin-top: 1.2rem;
+        margin-right: 1.4rem;
+        text-align: right;
+        font-size: 1.1rem; /* 【修改点】字号与正文一致 */
+        font-weight: 600; /* 加粗以示区分 */
+        color: var(--c-main);
+        opacity: 1; /* 提高不透明度，使其更清晰 */
+    }
 
-  .quote-author cite {
-    font-style: normal;
-  }
+    .quote-author cite {
+        font-style: normal;
+    }
 </style>

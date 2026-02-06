@@ -1,19 +1,19 @@
 ---
-title: "TypeScript泛型完全指南"
-description: "TypeScript泛型提供了强大的类型抽象能力，本文将全面介绍泛型的各种用法"
+title: 'TypeScript泛型完全指南'
+description: 'TypeScript泛型提供了强大的类型抽象能力，本文将全面介绍泛型的各种用法'
 pubDate: 2024-05-22T14:00:00
 updatedDate: 2024-05-25T11:20:00
 isDraft: false
 updates:
-  - date: 2024-05-23T16:45:00
-    content: "补充了条件类型的内容"
-    type: update
-  - date: 2024-05-24T10:30:00
-    content: "添加了更多实用示例"
-    type: update
-  - date: 2024-05-25T11:20:00
-    content: "修正了映射类型部分的错误"
-    type: correction
+    - date: 2024-05-23T16:45:00
+      content: '补充了条件类型的内容'
+      type: update
+    - date: 2024-05-24T10:30:00
+      content: '添加了更多实用示例'
+      type: update
+    - date: 2024-05-25T11:20:00
+      content: '修正了映射类型部分的错误'
+      type: correction
 ---
 
 ## 泛型基础

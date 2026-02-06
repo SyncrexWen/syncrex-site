@@ -18,93 +18,100 @@ import aCat from '../assets/images/aCat.jpeg';
 // which will use them in the <head> for SEO and display
 // and further support language toggle
 const pageTitle = {
-  zh: "禅与代码",
-  en: "Zen & Code"
+    zh: '禅与代码',
+    en: 'Zen & Code',
 };
 const pageDesc = {
-  zh: "探索极简主义与技术的边界。",
-  en: "Exploring the boundaries between minimalism and technology."
+    zh: '探索极简主义与技术的边界。',
+    en: 'Exploring the boundaries between minimalism and technology.',
 };
 ---
 
 <PageLayout title={pageTitle} description={pageDesc}>
+    <h2>
+        <Lang is="zh">设计理念</Lang>
+        <Lang is="en">Design Philosophy</Lang>
+    </h2>
 
-  <h2>
-    <Lang is="zh">设计理念</Lang>
-    <Lang is="en">Design Philosophy</Lang>
-  </h2>
+    <p>
+        <Lang is="zh">
+            在这个充满噪音的数字世界里，我们选择<b>做减法</b>。本页面展示了如何利用 <code
+                >Astro</code
+            > 的组件化架构和语义化 HTML，构建出既美观又高性能的网页。所有的样式都由底层的 Layout 统一管理，内容创作者只需专注于文字本身。
+        </Lang>
+        <Lang is="en">
+            In a digital world full of noise, we choose <b>subtraction</b>. This page demonstrates
+            how to use <code>Astro</code>'s component-based architecture and semantic HTML to build
+            web pages that are both beautiful and high-performance. All styles are managed uniformly
+            by the underlying Layout, allowing content creators to focus solely on the text.
+        </Lang>
+    </p>
 
-  <p>
-    <Lang is="zh">
-      在这个充满噪音的数字世界里，我们选择<b>做减法</b>。本页面展示了如何利用 <code>Astro</code> 的组件化架构和语义化 HTML，构建出既美观又高性能的网页。所有的样式都由底层的 Layout 统一管理，内容创作者只需专注于文字本身。
-    </Lang>
-    <Lang is="en">
-      In a digital world full of noise, we choose <b>subtraction</b>. This page demonstrates how to use <code>Astro</code>'s component-based architecture and semantic HTML to build web pages that are both beautiful and high-performance. All styles are managed uniformly by the underlying Layout, allowing content creators to focus solely on the text.
-    </Lang>
-  </p>
+    <h3>
+        <Lang is="zh">核心特性</Lang>
+        <Lang is="en">Key Features</Lang>
+    </h3>
 
-  <h3>
-    <Lang is="zh">核心特性</Lang>
-    <Lang is="en">Key Features</Lang>
-  </h3>
+    <ul>
+        <li>
+            <strong>
+                <Lang is="zh">零运行时开销：</Lang>
+                <Lang is="en">Zero Runtime Overhead:</Lang>
+            </strong>
+            <Lang is="zh">默认输出纯静态 HTML，加载速度极快。</Lang>
+            <Lang is="en">Ships pure static HTML by default, strictly fast.</Lang>
+        </li>
+        <li>
+            <strong>
+                <Lang is="zh">类型安全：</Lang>
+                <Lang is="en">Type Safety:</Lang>
+            </strong>
+            <Lang is="zh">完全集成的 TypeScript 支持，开发更安心。</Lang>
+            <Lang is="en">Fully integrated TypeScript support for peace of mind.</Lang>
+        </li>
+        <li>
+            <strong>
+                <Lang is="zh">优雅降级：</Lang>
+                <Lang is="en">Graceful Degradation:</Lang>
+            </strong>
+            <Lang is="zh">即使没有 JavaScript，页面依然完全可读。</Lang>
+            <Lang is="en">Content remains fully readable even without JavaScript.</Lang>
+        </li>
+    </ul>
 
-  <ul>
-    <li>
-      <strong>
-        <Lang is="zh">零运行时开销：</Lang>
-        <Lang is="en">Zero Runtime Overhead:</Lang>
-      </strong>
-      <Lang is="zh">默认输出纯静态 HTML，加载速度极快。</Lang>
-      <Lang is="en">Ships pure static HTML by default, strictly fast.</Lang>
-    </li>
-    <li>
-      <strong>
-        <Lang is="zh">类型安全：</Lang>
-        <Lang is="en">Type Safety:</Lang>
-      </strong>
-      <Lang is="zh">完全集成的 TypeScript 支持，开发更安心。</Lang>
-      <Lang is="en">Fully integrated TypeScript support for peace of mind.</Lang>
-    </li>
-    <li>
-      <strong>
-        <Lang is="zh">优雅降级：</Lang>
-        <Lang is="en">Graceful Degradation:</Lang>
-      </strong>
-      <Lang is="zh">即使没有 JavaScript，页面依然完全可读。</Lang>
-      <Lang is="en">Content remains fully readable even without JavaScript.</Lang>
-    </li>
-  </ul>
+    <QuoteBlock cite="Antoine de Saint-Exupéry">
+        <Lang is="zh">“完美不是加无可加，而是减无可减。”</Lang>
+        <Lang is="en"
+            >"Perfection is achieved, not when there is nothing more to add, but when there is
+            nothing left to take away."</Lang
+        >
+    </QuoteBlock>
 
-  <QuoteBlock cite='Antoine de Saint-Exupéry'>
-    <Lang is="zh">“完美不是加无可加，而是减无可减。”</Lang>
-    <Lang is="en">"Perfection is achieved, not when there is nothing more to add, but when there is nothing left to take away."</Lang>
-  </QuoteBlock>
+    <h3>
+        <Lang is="zh">开始探索</Lang>
+        <Lang is="en">Start Exploring</Lang>
+    </h3>
 
-  <h3>
-    <Lang is="zh">开始探索</Lang>
-    <Lang is="en">Start Exploring</Lang>
-  </h3>
+    <p>
+        <Lang is="zh">准备好深入了解了吗？查看我们的文档或直接浏览源码。</Lang>
+        <Lang is="en"
+            >Ready to dive deeper? Check out our documentation or browse the source code directly.</Lang
+        >
+    </p>
 
-  <p>
-    <Lang is="zh">准备好深入了解了吗？查看我们的文档或直接浏览源码。</Lang>
-    <Lang is="en">Ready to dive deeper? Check out our documentation or browse the source code directly.</Lang>
-  </p>
+    <p>
+        <a href="https://github.com/withastro/astro" target="_blank" rel="noopener noreferrer">
+            <Lang is="zh">访问 GitHub 仓库 &rarr;</Lang>
+            <Lang is="en">Visit GitHub Repository &rarr;</Lang>
+        </a>
+    </p>
 
-  <p>
-    <a href="https://github.com/withastro/astro" target="_blank" rel="noopener noreferrer">
-      <Lang is="zh">访问 GitHub 仓库 &rarr;</Lang>
-      <Lang is="en">Visit GitHub Repository &rarr;</Lang>
-    </a>
-  </p>
+    <QuoteBlock cite="Steve Jobs">
+        The only way to do great work is to love what you do. If you haven't found it yet, keep
+        looking. Don't settle.
+    </QuoteBlock>
 
-  <QuoteBlock cite="Steve Jobs">
-    The only way to do great work is to love what you do.
-    If you haven't found it yet, keep looking. Don't settle.
-  </QuoteBlock>
+    <QuoteBlock cite="《三体》- 刘慈欣"> 给岁月以文明，而不是给文明以岁月。 </QuoteBlock>
 
-  <QuoteBlock cite="《三体》- 刘慈欣">
-    给岁月以文明，而不是给文明以岁月。
-  </QuoteBlock>
-
-  <Image src={aCat} alt="A Cat" width={400} height={300} />
+    <Image src={aCat} alt="A Cat" width={400} height={300} />
 </PageLayout>

@@ -1,5 +1,5 @@
 ---
-import type { GetStaticPaths, Page } from "astro";
+import type { GetStaticPaths, Page } from 'astro';
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { Image } from 'astro:assets';
 
@@ -19,74 +19,98 @@ const { page } = Astro.props;
 ---
 
 <html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Traces | 碎片</title>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Traces | 碎片</title>
 
-    <style>
-        body { background: #1a202c; color: #e2e8f0; font-family: sans-serif; margin: 0; padding: 2rem 1rem; }
-        .container { max-width: 600px; margin: 0 auto; }
-        .back-link { color: #718096; text-decoration: none; margin-bottom: 2rem; display: inline-block; }
-    </style>
-</head>
-<body>
-    <div class="container">
-        {page.currentPage === 1 && <a href="/" class="back-link">← Return to Reality</a>}
+        <style>
+            body {
+                background: #1a202c;
+                color: #e2e8f0;
+                font-family: sans-serif;
+                margin: 0;
+                padding: 2rem 1rem;
+            }
+            .container {
+                max-width: 600px;
+                margin: 0 auto;
+            }
+            .back-link {
+                color: #718096;
+                text-decoration: none;
+                margin-bottom: 2rem;
+                display: inline-block;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            {
+                page.currentPage === 1 && (
+                    <a href="/" class="back-link">
+                        ← Return to Reality
+                    </a>
+                )
+            }
 
-        <div class="timeline">
-            {page.data.map((trace) => (
-                <article class="trace-item">
+            <div class="timeline">
+                {
+                    page.data.map((trace) => (
+                        <article class="trace-item">
+                            {/* 1. Time stamp */}
+                            <div class="trace-meta">
+                                <time datetime={trace.data.date.toISOString()}>
+                                    {trace.data.date.toLocaleDateString('zh-CN', {
+                                        month: 'short',
+                                        day: 'numeric',
+                                        hour: '2-digit',
+                                        minute: '2-digit',
+                                    })}
+                                </time>
+                            </div>
 
-                    {/* 1. Time stamp */}
-                    <div class="trace-meta">
-                        <time datetime={trace.data.date.toISOString()}>
-                            {trace.data.date.toLocaleDateString('zh-CN', {
-                                month: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit'
-                            })}
-                        </time>
-                    </div>
+                            {/* 2. Text content */}
+                            <div class="trace-content">{trace.body}</div>
 
-                    {/* 2. Text content */}
-                    <div class="trace-content">
-                        {trace.body}
-                    </div>
-
-                    {/* 3. Image gallery */}
-                    {trace.data.images && trace.data.images.length > 0 && (
-                        <div class="gallery-scroll">
-                            {trace.data.images.map((img) => (
-                                <div class="gallery-item">
-                                    <Image
-                                        src={img}
-                                        alt="Trace moment"
-                                        width={600}
-                                        quality={80}
-                                        class="gallery-img"
-                                    />
+                            {/* 3. Image gallery */}
+                            {trace.data.images && trace.data.images.length > 0 && (
+                                <div class="gallery-scroll">
+                                    {trace.data.images.map((img) => (
+                                        <div class="gallery-item">
+                                            <Image
+                                                src={img}
+                                                alt="Trace moment"
+                                                width={600}
+                                                quality={80}
+                                                class="gallery-img"
+                                            />
+                                        </div>
+                                    ))}
                                 </div>
-                            ))}
-                        </div>
-                    )}
-                </article>
-            ))}
-        </div>
-
-        {/* 4. Load more button */}
-        {page.url.next && (
-            <div class="load-more-container">
-                <button
-                    hx-get={page.url.next}
-                    hx-select=".timeline > *, .load-more-container"
-                    hx-swap="outerHTML"
-                    class="load-more-btn"
-                >
-                    Load Previous Moments
-                </button>
+                            )}
+                        </article>
+                    ))
+                }
             </div>
-        )}
-    </div>
-</body>
+
+            {/* 4. Load more button */}
+            {
+                page.url.next && (
+                    <div class="load-more-container">
+                        <button
+                            hx-get={page.url.next}
+                            hx-select=".timeline > *, .load-more-container"
+                            hx-swap="outerHTML"
+                            class="load-more-btn"
+                        >
+                            Load Previous Moments
+                        </button>
+                    </div>
+                )
+            }
+        </div>
+    </body>
 </html>
 
 <style>
@@ -94,7 +118,7 @@ const { page } = Astro.props;
     .trace-item {
         margin-bottom: 3rem;
         padding-bottom: 2rem;
-        border-bottom: 1px solid rgba(255,255,255,0.1);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
     .trace-meta {
         font-size: 0.85rem;
@@ -147,7 +171,7 @@ const { page } = Astro.props;
         transition: all 0.2s;
     }
     .load-more-btn:hover {
-        background: rgba(255,255,255,0.05);
+        background: rgba(255, 255, 255, 0.05);
         color: #fff;
     }
 </style>

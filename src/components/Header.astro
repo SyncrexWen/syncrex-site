@@ -13,130 +13,130 @@ import { SITE_TITLE } from '../consts';
 ---
 
 <header id="main-header" class="fixed-header">
-  <nav id="nav-container">
-    <h2><a href="/">{SITE_TITLE}</a></h2>
-    <div class="internal-links">
-      <HeaderLink href="/">Homepage</HeaderLink>
-      <HeaderLink href="/blogs">Blogs</HeaderLink>
-      <HeaderLink href="/thoughts">Thoughts</HeaderLink>
-      <HeaderLink href="/lab">Lab</HeaderLink>
-      <HeaderLink href="/aboutMe">Me</HeaderLink>
-      <HeaderLink href="/aboutWebsite">Site</HeaderLink>
-    </div>
-  </nav>
+    <nav id="nav-container">
+        <h2><a href="/">{SITE_TITLE}</a></h2>
+        <div class="internal-links">
+            <HeaderLink href="/">Homepage</HeaderLink>
+            <HeaderLink href="/blogs">Blogs</HeaderLink>
+            <HeaderLink href="/thoughts">Thoughts</HeaderLink>
+            <HeaderLink href="/lab">Lab</HeaderLink>
+            <HeaderLink href="/aboutMe">Me</HeaderLink>
+            <HeaderLink href="/aboutWebsite">Site</HeaderLink>
+        </div>
+    </nav>
 </header>
 
 <style>
-/* ============================
+    /* ============================
   1. Outer container (sticky header)
 ============================ */
 
-.fixed-header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  width: 100%;
-  padding-top: 1rem;
-  transition: padding-top 0.4s ease;
-  pointer-events: none;
-}
+    .fixed-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        padding-top: 1rem;
+        transition: padding-top 0.4s ease;
+        pointer-events: none;
+    }
 
-/* ============================
+    /* ============================
   2. Inner container (nav content, in default state)
 ============================ */
 
-#nav-container {
-  pointer-events: auto;
+    #nav-container {
+        pointer-events: auto;
 
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
 
-  padding: 0 1.5em;
-  height: 4rem;
+        padding: 0 1.5em;
+        height: 4rem;
 
-  max-width: 72rem;
-  border-radius: 1.5rem 1.5rem 0 0;
+        max-width: 72rem;
+        border-radius: 1.5rem 1.5rem 0 0;
 
-  /* Default to dark text with a white background */
-  background-color: #ffffff;
-  color: #0f172a;
+        /* Default to dark text with a white background */
+        background-color: #ffffff;
+        color: #0f172a;
 
-  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 
-  transition:
-    max-width 0.5s cubic-bezier(0.25, 1, 0.5, 1),
-    background-color 0.4s ease,
-    border-radius 0.4s ease,
-    color 0.4s ease;
-}
+        transition:
+            max-width 0.5s cubic-bezier(0.25, 1, 0.5, 1),
+            background-color 0.4s ease,
+            border-radius 0.4s ease,
+            color 0.4s ease;
+    }
 
-h2 {
-  margin: 0;
-  font-size: 1em;
-}
+    h2 {
+        margin: 0;
+        font-size: 1em;
+    }
 
-h2 a {
-  text-decoration: none;
-  color: inherit;
-  transition: color 0.3s;
-}
+    h2 a {
+        text-decoration: none;
+        color: inherit;
+        transition: color 0.3s;
+    }
 
-.internal-links a {
-  padding: 1em 0.5em;
-  color: inherit;
-  text-decoration: none;
-  border-bottom: 3px solid transparent;
-  transition: border-color 0.3s;
-}
+    .internal-links a {
+        padding: 1em 0.5em;
+        color: inherit;
+        text-decoration: none;
+        border-bottom: 3px solid transparent;
+        transition: border-color 0.3s;
+    }
 
-.internal-links a.active {
-  border-bottom-color: var(--accent);
-}
+    .internal-links a.active {
+        border-bottom-color: var(--accent);
+    }
 
-/* ============================
+    /* ============================
   3. Scrolled state styles
 ============================ */
 
-/* Remove the top padding when scrolled */
-:global(body.scrolled) .fixed-header {
-  padding-top: 0;
-}
+    /* Remove the top padding when scrolled */
+    :global(body.scrolled) .fixed-header {
+        padding-top: 0;
+    }
 
-/* Transformations */
-:global(body.scrolled) #nav-container {
-  max-width: 100%;
-  border-radius: 0;
+    /* Transformations */
+    :global(body.scrolled) #nav-container {
+        max-width: 100%;
+        border-radius: 0;
 
-  background-color: var(--glass-primary-bg);
-  color: #ffffff;
+        background-color: var(--glass-primary-bg);
+        color: #ffffff;
 
-  backdrop-filter: saturate(180%) blur(16px);
-  -webkit-backdrop-filter: saturate(180%) blur(16px);
+        backdrop-filter: saturate(180%) blur(16px);
+        -webkit-backdrop-filter: saturate(180%) blur(16px);
 
-  border-bottom: 1px solid var(--glass-border);
+        border-bottom: 1px solid var(--glass-border);
 
-  box-shadow: 0 4px 30px rgba(0,0,0,0.12);
-}
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.12);
+    }
 
-/* active statue: white line */
-:global(body.scrolled) .internal-links a.active {
-  border-bottom-color: #ffffff;
-}
+    /* active statue: white line */
+    :global(body.scrolled) .internal-links a.active {
+        border-bottom-color: #ffffff;
+    }
 </style>
 
 <script is:inline>
-  const header = document.getElementById('main-header');
+    const header = document.getElementById('main-header');
 
-  function handleScroll() {
-    if (window.scrollY > 10) {
-      document.body.classList.add('scrolled');
-    } else {
-      document.body.classList.remove('scrolled');
+    function handleScroll() {
+        if (window.scrollY > 10) {
+            document.body.classList.add('scrolled');
+        } else {
+            document.body.classList.remove('scrolled');
+        }
     }
-  }
 
-  window.addEventListener('scroll', handleScroll, { passive: true });
-  handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
 </script>

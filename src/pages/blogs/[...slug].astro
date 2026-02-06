@@ -15,12 +15,12 @@ import BlogPostLayout from '../../layouts/BlogPostLayout.astro';
 
 // Core functions for Astro pages:
 export async function getStaticPaths() {
-  const posts = await getCollection('blogs');
+    const posts = await getCollection('blogs');
 
-  return posts.map((post) => ({
-    params: { slug: post.slug },
-    props: post,
-  }));
+    return posts.map((post) => ({
+        params: { slug: post.slug },
+        props: post,
+    }));
 }
 
 const post = Astro.props;
@@ -35,9 +35,9 @@ const { Content, headings } = await post.render();
     headings={headings}
     updates={post.data.updates}
 >
-  <article>
-    <div>
-        <Content />
-    </div>
-  </article>
+    <article>
+        <div>
+            <Content />
+        </div>
+    </article>
 </BlogPostLayout>

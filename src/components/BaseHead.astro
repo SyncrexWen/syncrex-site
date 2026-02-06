@@ -18,9 +18,9 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 type BilingualString = string | { zh: string; en: string };
 
 interface Props {
-  title: BilingualString;
-  description: BilingualString;
-  image?: string;
+    title: BilingualString;
+    description: BilingualString;
+    image?: string;
 }
 
 const { title, description, image = '/favicon.svg' } = Astro.props;
@@ -57,11 +57,12 @@ const siteTitle = SITE_TITLE;
 <meta name="title" content={`${initialTitle} | ${siteTitle}`} />
 <meta name="description" content={initialDesc} />
 
-<meta id="meta-data-store"
-  data-zh-title={`${zhTitle} | ${siteTitle}`}
-  data-en-title={`${enTitle} | ${siteTitle}`}
-  data-zh-desc={zhDesc}
-  data-en-desc={enDesc}
+<meta
+    id="meta-data-store"
+    data-zh-title={`${zhTitle} | ${siteTitle}`}
+    data-en-title={`${enTitle} | ${siteTitle}`}
+    data-zh-desc={zhDesc}
+    data-en-desc={enDesc}
 />
 
 <meta property="og:type" content="website" />
@@ -77,92 +78,101 @@ const siteTitle = SITE_TITLE;
 <meta property="twitter:image" content={socialImageURL} />
 
 <link
-  rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
-  integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV"
-  crossorigin="anonymous"
->
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
+    integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV"
+    crossorigin="anonymous"
+/>
 
 <style is:global>
-  :root:not([data-lang]) .lang-en,
-  :root:not([data-lang]) .hidden-when-zh {
-    display: none !important;
-  }
+    :root:not([data-lang]) .lang-en,
+    :root:not([data-lang]) .hidden-when-zh {
+        display: none !important;
+    }
 
-  /* Hide English content when `html="en"` */
-  :root[data-lang="zh"] .lang-en,
-  :root[data-lang="zh"] .hidden-when-zh {
-    display: none !important;
-  }
+    /* Hide English content when `html="en"` */
+    :root[data-lang='zh'] .lang-en,
+    :root[data-lang='zh'] .hidden-when-zh {
+        display: none !important;
+    }
 
-  /* Hide Chinese content when `html="zh"` */
-  :root[data-lang="en"] .lang-zh,
-  :root[data-lang="en"] .hidden-when-en {
-    display: none !important;
-  }
+    /* Hide Chinese content when `html="zh"` */
+    :root[data-lang='en'] .lang-zh,
+    :root[data-lang='en'] .hidden-when-en {
+        display: none !important;
+    }
 </style>
 
 <script is:inline>
-  (function() {
-    const getThemePreference = () => {
-      if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
-        return localStorage.getItem('theme');
-      }
-      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    };
-    const isDark = getThemePreference() === 'dark';
-    document.documentElement.classList[isDark ? 'add' : 'remove']('dark');
+    (function () {
+        const getThemePreference = () => {
+            if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+                return localStorage.getItem('theme');
+            }
+            return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        };
+        const isDark = getThemePreference() === 'dark';
+        document.documentElement.classList[isDark ? 'add' : 'remove']('dark');
 
-    let currentLang = 'zh';
-    try {
-      currentLang = localStorage.getItem('site-lang') || 'zh';
-      document.documentElement.setAttribute('data-lang', currentLang);
-    } catch (e) {
-      document.documentElement.setAttribute('data-lang', 'zh');
-    }
+        let currentLang = 'zh';
+        try {
+            currentLang = localStorage.getItem('site-lang') || 'zh';
+            document.documentElement.setAttribute('data-lang', currentLang);
+        } catch (e) {
+            document.documentElement.setAttribute('data-lang', 'zh');
+        }
 
-    const updateTitle = (lang) => {
-      const metaStore = document.getElementById('meta-data-store');
-      if (!metaStore) return;
+        const updateTitle = (lang) => {
+            const metaStore = document.getElementById('meta-data-store');
+            if (!metaStore) return;
 
-      const newTitle = metaStore.getAttribute(`data-${lang}-title`);
-      const newDesc = metaStore.getAttribute(`data-${lang}-desc`);
+            const newTitle = metaStore.getAttribute(`data-${lang}-title`);
+            const newDesc = metaStore.getAttribute(`data-${lang}-desc`);
 
-      if (newTitle) document.title = newTitle;
+            if (newTitle) document.title = newTitle;
 
-      const descTag = document.querySelector('meta[name="description"]');
-      if (descTag && newDesc) descTag.setAttribute('content', newDesc);
-    };
+            const descTag = document.querySelector('meta[name="description"]');
+            if (descTag && newDesc) descTag.setAttribute('content', newDesc);
+        };
 
-    if (typeof localStorage !== 'undefined') {
-      const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-          if (mutation.type === 'attributes') {
-             if(mutation.attributeName === 'class') {
-                const isDark = document.documentElement.classList.contains('dark');
-                localStorage.setItem('theme', isDark ? 'dark' : 'light');
-             }
+        if (typeof localStorage !== 'undefined') {
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    if (mutation.type === 'attributes') {
+                        if (mutation.attributeName === 'class') {
+                            const isDark = document.documentElement.classList.contains('dark');
+                            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+                        }
 
-             if(mutation.attributeName === 'data-lang') {
-                const newLang = document.documentElement.getAttribute('data-lang');
-                updateTitle(newLang);
-             }
-          }
-        });
-      });
-      observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class', 'data-lang'] });
+                        if (mutation.attributeName === 'data-lang') {
+                            const newLang = document.documentElement.getAttribute('data-lang');
+                            updateTitle(newLang);
+                        }
+                    }
+                });
+            });
+            observer.observe(document.documentElement, {
+                attributes: true,
+                attributeFilter: ['class', 'data-lang'],
+            });
 
-      document.addEventListener('DOMContentLoaded', () => {
-        updateTitle(document.documentElement.getAttribute('data-lang') || 'zh');
-      });
-    }
-  })();
+            document.addEventListener('DOMContentLoaded', () => {
+                updateTitle(document.documentElement.getAttribute('data-lang') || 'zh');
+            });
+        }
+    })();
 </script>
 
 <noscript>
-  <style>
-    .lang-en { display: none !important; }
-    .lang-zh { display: block !important; }
-    #lang-toggle { display: none !important; }
-  </style>
+    <style>
+        .lang-en {
+            display: none !important;
+        }
+        .lang-zh {
+            display: block !important;
+        }
+        #lang-toggle {
+            display: none !important;
+        }
+    </style>
 </noscript>

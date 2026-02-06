@@ -4,44 +4,43 @@
 @tailwind utilities;
 
 :root {
-  /* Theme color */
-  --theme-color-primary: 45, 55, 72;
+    /* Theme color */
+    --theme-color-primary: 45, 55, 72;
 
-  /* Define semantic variables */
-  --c-main: rgb(var(--theme-color-primary));
-  --c-bg: #ffffff;
-  --c-text: var(--c-main);
+    /* Define semantic variables */
+    --c-main: rgb(var(--theme-color-primary));
+    --c-bg: #ffffff;
+    --c-text: var(--c-main);
 
-  /* Define border radius and other */
-  --radius-card: 16px;
+    /* Define border radius and other */
+    --radius-card: 16px;
 
-  /* Define muted color */
-  --c-muted: #64748b;
+    /* Define muted color */
+    --c-muted: #64748b;
 
-  /* Define liquid glass color */
-  --glass-bg: rgba(255,255,255,0.7);
-  --glass-border: rgba(255,255,255,0.6);
-  --glass-primary-bg: rgba(45, 55, 72, 0.85);
-  --glass-light-bg: rgba(255, 255, 255, 0.55);
-  --glass-light-bg-hover: rgba(255, 255, 255, 0.8);
-  --glass-border-primary: rgba(45, 55, 72, 0.15);
-  --glass-border-light: rgba(255, 255, 255, 0.35);
+    /* Define liquid glass color */
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.6);
+    --glass-primary-bg: rgba(45, 55, 72, 0.85);
+    --glass-light-bg: rgba(255, 255, 255, 0.55);
+    --glass-light-bg-hover: rgba(255, 255, 255, 0.8);
+    --glass-border-primary: rgba(45, 55, 72, 0.15);
+    --glass-border-light: rgba(255, 255, 255, 0.35);
 }
 
 /* Define dark mode */
-:root[class="dark"] {
-  --c-bg: rgb(var(--theme-color-primary));
-  --c-text: #ffffff;
+:root[class='dark'] {
+    --c-bg: rgb(var(--theme-color-primary));
+    --c-text: #ffffff;
 }
 
 /* Define liqid glass color for the dark mode */
 :root.dark {
-  --glass-bg: rgba(30,41,59,0.7);
-  --glass-border: rgba(255,255,255,0.1);
+    --glass-bg: rgba(30, 41, 59, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.1);
 }
 
 /* Optimize scroll */
 html {
-  scroll-behavior: smooth;
+    scroll-behavior: smooth;
 }
-
