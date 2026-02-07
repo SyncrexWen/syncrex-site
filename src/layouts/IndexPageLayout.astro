@@ -1,0 +1,112 @@
+---
+// src/layouts/IndexPageLayout.astro
+
+/**
+ * IndexPageLayout
+ * * The specialized layout for index page.
+ * with a intro part acting as a title.
+ * Features:
+ * - Bilingual title/description support
+ * - Reading progress bar
+ * - Centered typography-optimized content area
+ */
+
+import DefaultLayout from './DefaultLayout.astro';
+import LanguageToggle from '../components/LanguageToggle.astro';
+
+type BilingualString = string | { zh: string; en: string };
+
+interface Props {
+    /** Page title. Pass an object {zh, en} for bilingual support. */
+    title: BilingualString;
+    /** Page description. Optional. */
+    description?: BilingualString;
+    /** Force the language toggle to a specific state. */
+    lockedLang?: 'zh' | 'en';
+    /** Intro content acting as a title. Optional. */
+    intro?: BilingualString;
+}
+
+const { title, description, lockedLang, intro } = Astro.props;
+
+// === Logic: Bilingual Rendering ===
+// Helper to generate hidden-when-xx spans based on global.css rules.
+// CRITICAL: Class names must match BaseHead.astro styles.
+const renderBilingual = (content: BilingualString) => {
+    if (typeof content === 'string') return content;
+    return `
+    <span class="hidden-when-en">${content.zh}</span>
+    <span class="hidden-when-zh">${content.en}</span>
+    `;
+};
+
+const renderIntro = (intro: BilingualString) => {
+    if (typeof intro === 'string') return intro;
+    return `
+    <span class="hidden-when-en italic">${intro.zh}</span>
+    <span class="hidden-when-zh italic">${intro.en}</span>
+    `;
+};
+
+const titleHtml = renderBilingual(title);
+const descHtml = description ? renderBilingual(description) : null;
+const introHtml = intro ? renderIntro(intro) : null;
+
+// === Logic: SEO Fallback ===
+// Use Chinese as the default meta title/desc for crawlers
+const metaTitle = typeof title === 'string' ? title : title.zh;
+const metaDesc = typeof description === 'string' ? description : description?.zh;
+---
+
+<DefaultLayout title={metaTitle} description={metaDesc}>
+    <div
+        id="progress-container"
+        class="fixed top-0 left-0 w-full h-1 z-[101] bg-transparent pointer-events-none"
+    >
+        <div id="progress-bar" class="h-full bg-primary w-0 transition-all duration-100 ease-out">
+        </div>
+    </div>
+
+    <article class="w-full max-w-4xl mx-auto flex flex-col items-center relative z-10">
+        <div class="w-full flex justify-end mb-8 px-2 sm:px-0">
+            <LanguageToggle lockedLang={lockedLang} />
+        </div>
+
+        {
+            introHtml ? (<h1
+                class="text-3xl md:text-4xl lg:text-5xl font-black text-center text-main leading-[1.1] mb-6 max-w-3xl"
+                set:html={introHtml}
+            />) : (<h1
+                class="text-4xl md:text-5xl lg:text-6xl font-black text-center text-main leading-[1.1] mb-6 max-w-3xl"
+                set:html={titleHtml}
+            />)
+        }
+
+        {
+            descHtml && (
+                <p
+                    class="text-xl md:text-2xl text-main/60 text-center font-serif italic max-w-2xl leading-relaxed opacity-90"
+                    set:html={descHtml}
+                />
+            )
+        }
+
+        <hr class="w-24 border-t-4 border-primary/20 rounded-full my-12" />
+
+        <div
+            class="w-full max-w-3xl mx-auto
+            prose prose-lg
+            prose-headings:font-bold prose-headings:text-main
+            prose-p:text-justify prose-p:leading-loose"
+        >
+            <slot />
+        </div>
+
+        <div class="mt-20 pt-10 border-t border-slate-100 w-full max-w-2xl text-center">
+            <p class="text-slate-400 text-sm tracking-wide font-medium uppercase">
+                <span>Thanks for reading</span>
+            </p>
+            <div class="w-2 h-2 bg-slate-200 rounded-full mx-auto mt-4"></div>
+        </div>
+    </article>
+</DefaultLayout>

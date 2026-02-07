@@ -6,112 +6,124 @@
  * This is the main landing page of the website.
  */
 
-import PageLayout from '../layouts/PageLayout.astro';
+import IndexPageLayout from '../layouts/IndexPageLayout.astro';
 import Lang from '../components/Lang.astro';
 import QuoteBlock from '../components/QuoteBlock.astro';
 
 import { Image } from 'astro:assets';
-import aCat from '../assets/images/aCat.jpeg';
 
 // define the metadata for the page, including title and description in both languages
 // { pageTitle } and { pageDesc } are passed as props to PageLayout,
 // which will use them in the <head> for SEO and display
 // and further support language toggle
-const pageTitle = {
-    zh: '禅与代码',
-    en: 'Zen & Code',
-};
+const pageTitle = "Homepage"
 const pageDesc = {
-    zh: '探索极简主义与技术的边界。',
-    en: 'Exploring the boundaries between minimalism and technology.',
+    zh: '我在这个网站上分享我在生活和技术方面的所思所想',
+    en: 'This site is where I share my thoughts and research on technology, healthcare, and life.',
 };
+const intro = {
+    zh: 'Hi，我是文康丞，一个在医学院苦苦挣扎的医学生',
+    en: 'I\'m Kangcheng Wen, a medical student struggling in med school. ',
+}
 ---
 
-<PageLayout title={pageTitle} description={pageDesc}>
+<IndexPageLayout title={pageTitle} description={pageDesc} intro={intro}>
+
     <h2>
-        <Lang is="zh">设计理念</Lang>
-        <Lang is="en">Design Philosophy</Lang>
+        <Lang is="zh">页面导览</Lang>
+        <Lang is="en">NAVIGATION</Lang>
     </h2>
 
     <p>
         <Lang is="zh">
-            在这个充满噪音的数字世界里，我们选择<b>做减法</b>。本页面展示了如何利用 <code
-                >Astro</code
-            > 的组件化架构和语义化 HTML，构建出既美观又高性能的网页。所有的样式都由底层的 Layout 统一管理，内容创作者只需专注于文字本身。
+            这里有不定期掉落技术干货的<a href="/blogs">博客</a>；
+            <a href="/lab">微研究</a>板块记录着我源于生活脑洞的小调查或研究；
+            <a href="/thoughts">随想</a>则是一些不成体系的碎片化思考，也包含了一些牢骚；
+            <a href="/aboutMe">关于我</a>和<a href="/aboutWebsite">关于这个网站</a>提供了更多的背景信息。
+            你可以通过顶部的导航栏访问不同部分。
         </Lang>
         <Lang is="en">
-            In a digital world full of noise, we choose <b>subtraction</b>. This page demonstrates
-            how to use <code>Astro</code>'s component-based architecture and semantic HTML to build
-            web pages that are both beautiful and high-performance. All styles are managed uniformly
-            by the underlying Layout, allowing content creators to focus solely on the text.
+            Pop into my <a href="/blogs">Blogs</a> for occasional tech posts,
+            or check out the <a href="/lab">Mini Lab</a> for survey or research inspired by daily life.
+            <a href="/thoughts">Thoughts</a> is a collection of fragmented musings (and the occasional rant).
+            For the full backstory, visit <a href="/aboutMe">About Me</a> and <a href="/aboutWebsite">About This Site</a>.
+            You can access different sections through the navigation bar at the top.
         </Lang>
     </p>
 
-    <h3>
-        <Lang is="zh">核心特性</Lang>
-        <Lang is="en">Key Features</Lang>
-    </h3>
-
-    <ul>
-        <li>
-            <strong>
-                <Lang is="zh">零运行时开销：</Lang>
-                <Lang is="en">Zero Runtime Overhead:</Lang>
-            </strong>
-            <Lang is="zh">默认输出纯静态 HTML，加载速度极快。</Lang>
-            <Lang is="en">Ships pure static HTML by default, strictly fast.</Lang>
-        </li>
-        <li>
-            <strong>
-                <Lang is="zh">类型安全：</Lang>
-                <Lang is="en">Type Safety:</Lang>
-            </strong>
-            <Lang is="zh">完全集成的 TypeScript 支持，开发更安心。</Lang>
-            <Lang is="en">Fully integrated TypeScript support for peace of mind.</Lang>
-        </li>
-        <li>
-            <strong>
-                <Lang is="zh">优雅降级：</Lang>
-                <Lang is="en">Graceful Degradation:</Lang>
-            </strong>
-            <Lang is="zh">即使没有 JavaScript，页面依然完全可读。</Lang>
-            <Lang is="en">Content remains fully readable even without JavaScript.</Lang>
-        </li>
-    </ul>
-
-    <QuoteBlock cite="Antoine de Saint-Exupéry">
-        <Lang is="zh">“完美不是加无可加，而是减无可减。”</Lang>
-        <Lang is="en"
-            >"Perfection is achieved, not when there is nothing more to add, but when there is
-            nothing left to take away."</Lang
-        >
-    </QuoteBlock>
-
-    <h3>
-        <Lang is="zh">开始探索</Lang>
-        <Lang is="en">Start Exploring</Lang>
-    </h3>
+    <h2>
+        <Lang is="zh">此时此刻</Lang>
+        <Lang is="en">Now</Lang>
+    </h2>
 
     <p>
-        <Lang is="zh">准备好深入了解了吗？查看我们的文档或直接浏览源码。</Lang>
-        <Lang is="en"
-            >Ready to dive deeper? Check out our documentation or browse the source code directly.</Lang
-        >
+        <Lang is="zh">
+            目前就读于<a href="https://www.pku.edu.cn/">北京大学</a>-
+            <a href="https://sbms.bjmu.edu.cn/">基础医学院</a>（医专） 临床医学专业
+            （如果你对此感兴趣，建议直接问 AI，毕竟医学部官网常年“抽风”，不过我几乎不推荐任何人感兴趣...）。
+            平时常驻北京海淀，假期回家乡云南躺平。
+            现混迹于<a href="https://www.puh3.net.cn/">北医三院</a>某课题组，试图搞懂 AI 在医疗领域的应用。
+            虽然对 AI 充满热情，但感觉离真正的“科研”还有亿点距离；基础医学院的课业也让我头秃，经常学得云里雾里。
+            结果就是——我在两边都是个略显笨拙的“门外汉”。
+            我也许（并不）能帮你看看膝关节的问题。
+            搭建这个网站是为了记录学习、分享想法，欢迎随时找我聊天。
+            更多信息请移步<a href="/aboutMe">关于我</a>。
+        </Lang>
+        <Lang is="en">
+            I'm currently surviving medical school at <a href="https://www.pku.edu.cn">Peking University</a>-<a href="https://sbms.bjmu.edu.cn/">School of Basic Medical Sciences</a>.
+            I'm based in Haidian, Beijing, though I escape to my hometown in Yunnan whenever possible.
+            I'm interning at a research group in <a href="https://www.puh3.net.cn/">Peking University Third Hospital</a>, exploring AI in healthcare.
+            I'm fascinated by AI algorithms, even if "real research" feels lightyears away. Meanwhile, medical school is... humbling (read: I'm struggling to get decent scores).
+            So, I'm basically a "Level 2 Dabbler" in both fields.
+            I might (read: definitely shouldn't) offer advice on your knees.
+            This site is where I document my learning curve and random thoughts. I'm always open to a chat!
+            More info can be found on the <a href="/aboutMe">About Me</a> page.
+        </Lang>
     </p>
 
     <p>
-        <a href="https://github.com/withastro/astro" target="_blank" rel="noopener noreferrer">
-            <Lang is="zh">访问 GitHub 仓库 &rarr;</Lang>
-            <Lang is="en">Visit GitHub Repository &rarr;</Lang>
-        </a>
+        <Lang is="zh">
+            开发和部署这个网站的目的是想让我慢慢跻身入“深度思考者”的行列。
+            在浑浑噩噩摆摆烂烂度过我的大二上学期后，我意识到自己需要一个平台来记录和分享我的思考过程，迫使自己去深入思考一些问题，而不是停留在表面。
+            我非常认可<code>费曼学习法</code>
+            （这篇<a href="https://zhuanlan.zhihu.com/p/118183282">知乎文章</a>对此有很好的介绍，
+            我很喜欢的博主<a href="https://space.bilibili.com/391930545">Maki</a>有一系列视频详细完整地讲解费曼学习法的实践），
+            而我希望这个网站就是我实践费曼学习法的产物之一。
+            这个网站就是我为自己设立的输出平台，虽然现在内容还很稀少，但我会持续更新博客和随想，并偶尔发布一些微研究的成果。
+            我还有更多开发这个网站的动机，更多信息包括网站搭建的过程、网站的设计等可以在<a href="/aboutWebsite">关于这个网站</a>页面找到。
+        </Lang>
+        <Lang is="en">
+            I built this website to pull myself out of a sophomore slump and force myself into "Deep Thinker" mode.
+            After spending my sophomore fall in a haze of procrastination,
+            I realized I needed a platform to document my thought process and stop skimming the surface of knowledge.
+            I'm a big fan of the <code>Feynman Technique</code>
+            (this <a href="https://fs.blog/feynman-technique/">article</a> gives a good introduction to it, you can google it yourself or chat with GPTs if you don't know it),
+            and I hope this website is one of the products of my practice of the Feynman Technique.
+            This website is the platform I set up for myself, and although the content is still sparse,
+            It's quite empty right now, but I promise to keep updating my blogs, thoughts, and the occasional mini-research project.
+            For the tech stack and the overly complex backstory of why I built this, check out <a href="/aboutWebsite">About This Site</a>.
+        </Lang>
     </p>
 
-    <QuoteBlock cite="Steve Jobs">
-        The only way to do great work is to love what you do. If you haven't found it yet, keep
-        looking. Don't settle.
-    </QuoteBlock>
+    <h2>
+        <Lang is="zh">联系我</Lang>
+        <Lang is="en">Connect</Lang>
+    </h2>
 
-    <QuoteBlock cite="《三体》- 刘慈欣"> 给岁月以文明，而不是给文明以岁月。 </QuoteBlock>
+    <p>
+        <Lang is="zh">
+            欢迎通过邮件联系我：<a href="mailto:kangchengwen@proton.me">kangchengwen@proton.me</a> 或 <a href="mailto:syncrexwen@stu.pku.edu.cn">syncrexwen@stu.pku.edu.cn</a>
+        </Lang>
+        <Lang is="en">
+            Reach me at <a href="mailto:kangchengwen@proton.me">kangchengwen@proton.me</a> or <a href="mailto:syncrexwen@stu.pku.edu.cn">syncrexwen@stu.pku.edu.cn</a>
+        </Lang>
+    </p>
 
-    <Image src={aCat} alt="A Cat" width={400} height={300} />
-</PageLayout>
+    <Lang is="zh">
+        <QuoteBlock cite="胡适">怕什么真理无穷，进一寸有一寸的欢喜。</QuoteBlock>
+    </Lang>
+    <Lang is="en">
+        <QuoteBlock cite="Samuel Beckett">Ever tried. Ever failed. No matter. Try again. Fail again. Fail better. </QuoteBlock>
+    </Lang>
+
+</IndexPageLayout>

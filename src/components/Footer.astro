@@ -10,6 +10,24 @@
  */
 
 import { AUTHOR } from '../consts';
+import Lang from './Lang.astro';
+
+const footQuote = {
+    en: "This is a garden, not a museum. Work in progress.",
+    zh: "这不是博物馆，而是一座花园。一直在生长。"
+};
+
+type BilingualString = string | { zh: string; en: string };
+
+const renderBilingual = (content: BilingualString) => {
+    if (typeof content === 'string') return content;
+    return `
+    <span class="hidden-when-en">${content.zh}</span>
+    <span class="hidden-when-zh">${content.en}</span>
+    `;
+};
+
+const text = renderBilingual(footQuote);
 
 const today = new Date();
 ---
@@ -18,6 +36,9 @@ const today = new Date();
     <div class="footer-divider"></div>
 
     <div class="footer-content">
+
+        <div class="foot-quote" set:html={text} />
+
         <div class="social-links">
             <a href="/rss.xml" target="_blank" aria-label="RSS Feed">
                 <span class="sr-only">RSS</span>
@@ -106,7 +127,7 @@ const today = new Date();
         top: 0;
         left: 50%;
         transform: translateX(-50%);
-        width: 80%; /* 不占满，显得更精致 */
+        width: 80%;
         max-width: 600px;
         height: 1px;
         background: linear-gradient(
@@ -182,4 +203,24 @@ const today = new Date();
 
         transition-delay: 2s;
     }
+
+    .foot-quote {
+        font-size: 0.8rem;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        color: #55657e;
+        opacity: 0.8;
+        font-style: italic;
+        text-align: center;
+        max-width: 90%;
+        margin: -0.5rem 0;
+        transition: all 0.5s ease;
+        cursor: default;
+    }
+
+    .foot-quote:hover {
+        color: #94a3b8;
+        opacity: 1;
+        letter-spacing: 0.02em;
+    }
+
 </style>
