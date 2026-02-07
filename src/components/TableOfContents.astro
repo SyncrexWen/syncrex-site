@@ -2,48 +2,249 @@
 // src/components/TableOfContents.astro
 
 /**
- * TableOfContents
- * This component generates a table of contents based on the headings provided in the props.
- * It filters out H1 (depth 1) and any headings deeper than H3 (depth > 3) to maintain a clean and concise TOC.
- * Each entry in the TOC links to the corresponding section in the page using anchor links.
- * If there are no valid headings, it displays a message indicating that there are no contents.
- * Props:
- * - headings: An array of heading objects, each containing `depth`, `text`, and `slug` properties.
- * Usage:
- * <TableOfContents headings={headings} />
+ * TableOfContents Component
+ * * Features:
+ * 1. Hybrid Rendering: Supports server-side headings (Markdown) or client-side generation (standard Astro pages).
+ * 2. Scroll Spy: Highlights the current section as the user scrolls.
+ * 3. Auto-Visibility: Hides initially and appears after scrolling down.
+ * 4. Auto-ID: Automatically generates IDs for H2/H3 tags if they are missing.
  */
 
 const { headings } = Astro.props;
 
-// Filter out H1 (depth 1) and any headings deeper than H3 (depth > 3)
-const toc = (headings || []).filter((h: any) => h.depth > 1 && h.depth < 4);
+// Filter out H1 (depth 1) and deep headings (depth > 3).
+// If 'headings' are not provided (e.g., static pages), this array will be empty,
+// and the script will handle generation on the client side.
+const serverToc = (headings || []).filter((h: any) => h.depth > 1 && h.depth < 4);
 ---
 
-{
-    toc.length > 0 ? (
+<aside
+    class="fixed right-8 top-32 w-64 z-10 hidden xl:block toc-card initial-state"
+    id="floating-toc"
+>
+    <div class="glass-card p-5">
+        <h3 class="font-bold text-main mb-3 text-xs uppercase tracking-widest border-b border-gray-200/50 pb-2">
+            Contents
+        </h3>
+
         <nav class="toc-nav">
-            <ul class="space-y-2">
-                {toc.map((heading: any) => (
+            <ul class="space-y-2" id="toc-list">
+                {/* Server-Side Rendering Logic:
+                    Used when 'headings' prop is explicitly provided (e.g., Blog Post Layouts).
+                */}
+                {serverToc.length > 0 && serverToc.map((heading: any) => (
                     <li class={`toc-item depth-${heading.depth}`}>
                         <a
                             href={`#${heading.slug}`}
-                            class="block text-sm text-gray-500 hover:text-[#2d3748] transition-colors duration-200 truncate"
-                            title={heading.text}
+                            class="toc-link block text-sm text-gray-500 transition-colors duration-200 truncate"
+                            data-target={heading.slug}
                         >
                             {heading.text}
                         </a>
                     </li>
                 ))}
             </ul>
+
+            {/* Placeholder:
+                Hidden if serverToc exists.
+                Used by client-side script to show "No contents" if no headers are found.
+            */}
+            <p id="toc-empty" class={`text-xs text-gray-400 italic ${serverToc.length > 0 ? 'hidden' : ''}`}>
+                Parsing contents...
+            </p>
         </nav>
-    ) : (
-        <p class="text-xs text-gray-400 italic">No contents</p>
-    )
-}
+    </div>
+</aside>
 
 <style>
+    /* --- Basic Styles --- */
     .depth-3 {
         padding-left: 1rem;
-        font-size: 0.8rem;
+        font-size: 0.85rem;
+    }
+
+    .glass-card {
+        background: var(--glass-bg, rgba(255,255,255,0.8));
+        border: 1px solid var(--glass-border, rgba(255,255,255,0.5));
+        backdrop-filter: saturate(180%) blur(12px);
+        -webkit-backdrop-filter: saturate(180%) blur(12px);
+        border-radius: 1rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+
+    /* --- Animation States --- */
+    .toc-card {
+        transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+        will-change: opacity, transform;
+    }
+    .initial-state {
+        opacity: 0;
+        transform: translateY(20px);
+        pointer-events: none;
+    }
+    .toc-visible {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+    }
+
+    /* --- Active State Highlighting --- */
+    .toc-link {
+        border-left: 2px solid transparent;
+        padding-left: 0.5rem;
+    }
+    .toc-link:hover {
+        color: #2d3748;
+    }
+
+    /* Active class applied by IntersectionObserver */
+    :global(.toc-link.active) {
+        color: #3b82f6; /* Accent color (e.g., blue-500) */
+        font-weight: 600;
+        border-left-color: #3b82f6;
+        background: rgba(59, 130, 246, 0.05);
+        border-radius: 0 4px 4px 0;
     }
 </style>
+
+<script>
+    const tocContainer = document.getElementById('floating-toc');
+    const tocList = document.getElementById('toc-list');
+    const emptyMsg = document.getElementById('toc-empty');
+
+    /**
+     * Feature 1: Client-side TOC Generation
+     * Scans the document for H2 and H3 tags and generates the TOC dynamically.
+     * Only runs if server-side props were not provided.
+     */
+    function generateTocClientSide() {
+        if (tocList && tocList.children.length === 0) {
+
+            // Selector: Ensure your content is wrapped in <article> or <main>
+            const articleContent = document.querySelector('article') || document.querySelector('main');
+
+            if (!articleContent) return;
+
+            const headers = articleContent.querySelectorAll('h2, h3');
+
+            if (headers.length === 0) {
+                if (emptyMsg) {
+                    emptyMsg.innerText = "No contents";
+                    emptyMsg.classList.remove('hidden');
+                }
+                return;
+            }
+
+            if (emptyMsg) emptyMsg.classList.add('hidden');
+
+            headers.forEach(header => {
+                // 1. Auto-generate ID if missing
+                if (!header.id) {
+                    header.id = (header.textContent || '')
+                        .trim()
+                        .toLowerCase()
+                        .replace(/\s+/g, '-')
+                        .replace(/[^\w-]/g, '');
+                }
+
+                // 2. Create TOC Item
+                const li = document.createElement('li');
+                const depth = header.tagName === 'H2' ? 2 : 3;
+                li.className = `toc-item depth-${depth}`;
+
+                const a = document.createElement('a');
+                a.href = `#${header.id}`;
+                a.className = 'toc-link block text-sm text-gray-500 transition-colors duration-200 truncate';
+                a.dataset.target = header.id;
+                a.textContent = header.textContent;
+
+                li.appendChild(a);
+                tocList.appendChild(li);
+            });
+        }
+    }
+
+    /**
+     * Feature 2: Scroll Spy
+     * Highlights the active TOC link based on viewport intersection.
+     */
+    function setupScrollSpy() {
+        const links = document.querySelectorAll('.toc-link');
+        if (links.length === 0) return;
+
+        // Observer options: Trigger when the header is near the top of the viewport
+        const observerOptions = {
+            root: null,
+            rootMargin: '-100px 0px -60% 0px',
+            threshold: 0
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Remove active class from all links
+                    links.forEach(l => l.classList.remove('active'));
+
+                    // Add active class to the current link
+                    const id = entry.target.getAttribute('id');
+                    const activeLink = document.querySelector(`.toc-link[data-target="${id}"]`);
+                    if (activeLink) {
+                        activeLink.classList.add('active');
+                    }
+                }
+            });
+        }, observerOptions);
+
+        // Observe all H2 and H3 elements
+        document.querySelectorAll('h2, h3').forEach((header) => {
+            observer.observe(header);
+        });
+    }
+
+    /**
+     * Feature 3: Visibility Toggle
+     * Shows/Hides the TOC card based on scroll position (e.g., after scrolling past the hero section).
+     */
+    function setupVisibilityToggle() {
+        let isTicking = false;
+
+        // Clean up previous listener if it exists (for SPA navigation)
+        const onScroll = () => {
+            if (!isTicking) {
+                window.requestAnimationFrame(() => {
+                    const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+                    if (tocContainer) {
+                        if (scrollTop > 300) {
+                            tocContainer.classList.remove('initial-state');
+                            tocContainer.classList.add('toc-visible');
+                        } else {
+                            tocContainer.classList.remove('toc-visible');
+                            tocContainer.classList.add('initial-state');
+                        }
+                    }
+                    isTicking = false;
+                });
+                isTicking = true;
+            }
+        };
+
+        window.addEventListener('scroll', onScroll, { passive: true });
+    }
+
+    /**
+     * Initialization
+     * Supports both standard page loads and Astro View Transitions.
+     */
+    const init = () => {
+        generateTocClientSide();
+        setupScrollSpy();
+        setupVisibilityToggle();
+    };
+
+    // Trigger on initial load
+    document.addEventListener('DOMContentLoaded', init);
+
+    // Trigger on View Transition navigation (Astro 3.0+)
+    document.addEventListener('astro:page-load', init);
+
+</script>
